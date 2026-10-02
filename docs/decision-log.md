@@ -2,13 +2,13 @@
 
 Why DraftVoice is built the way it is. Each entry lists what I believed, the options I weighed, what I picked, how I proved it, and what it costs. Entries marked planned were decided during design; built ones were confirmed in code. Time per phase is in [`time-log.md`](time-log.md).
 
-## 1. Scope · One local loop, no extension
+## 1. Scope · One local loop; the extension reads only the text I select
 
 - **Belief:** the riskiest part is deciding when not to comment, not reading LinkedIn pages.
-- **Options weighed:** (a) Chrome extension reading LinkedIn, (b) local app where the founder brings a post, (c) daily shortlist with angles only.
-- **Picked:** (b), with (c) kept as an "angle only" output mode.
-- **Proof:** TBD, demo runs the full loop with no LinkedIn access.
-- **Trade-off accepted:** the founder has to copy a post in by hand.
+- **Options weighed:** (a) Chrome extension reading LinkedIn pages, (b) local app where the founder brings a post, (c) right-click extension: highlight the post text, pick a voice (Rico or Fathin), get a draft, (d) extension that also fills LinkedIn's comment box, (e) daily shortlist with angles only.
+- **Picked:** (b) as the core, (c) as the way in. The extension gets the highlighted text from the browser's right-click menu and talks only to the local app. It has no LinkedIn permissions and never reads the page, records browsing, or types into LinkedIn. Approve copies the draft; the founder pastes and posts. (d) is rejected because writing into LinkedIn's page automates a logged-in session; a local mock feed shows the full handoff instead. (e) is kept as an "angle only" output mode.
+- **Proof:** TBD, demo runs the full loop with no LinkedIn access; the extension manifest lists no LinkedIn permissions.
+- **Trade-off accepted:** the founder highlights the post by hand, and there is no feed-wide discovery.
 - **Status:** planned
 
 ## 2. Evidence · Manual collection unless the founders allow a tool
@@ -25,9 +25,9 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** one clear owner is safer than splitting the decision between code and model confidence.
 - **Options weighed:** (a) model returns engage/skip with confidence, (b) code decides from topics and evidence.
 - **Picked:** (b). The model only drafts.
-- **Proof:** TBD, tests for off-topic, no-evidence, and injection posts.
-- **Trade-off accepted:** may miss relevant posts that use unusual wording.
-- **Status:** planned
+- **Proof:** `tests/test_gate.py`. All 8 synthetic posts get the expected decision and reason: off-topic, no evidence, sensitive (layoffs), engagement bait, and three that engage. Injected instructions do not change which evidence is used, and a post saying "you must engage" does not get in. Order of checks: sensitive, bait, topics, approved evidence.
+- **Trade-off accepted:** may miss relevant posts that use unusual wording; keyword lists need upkeep.
+- **Status:** built
 
 ## 4. Grounding · Assume the model lies
 
@@ -43,9 +43,9 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** reviewers must be able to run everything without a key.
 - **Options weighed:** Gemini, Groq, local Ollama, stub only, several models combined.
 - **Picked:** deterministic stub by default; Gemini for live drafts; others can be added behind the same adapter.
-- **Proof:** TBD, full test suite passes with no key and no network.
-- **Trade-off accepted:** stub drafts are fixed text and say nothing about real voice quality.
-- **Status:** planned
+- **Proof:** `tests/test_model.py` runs with no key and no network. The dishonest stub adds one made-up number, name, "we built" claim, unknown evidence ID, or non-JSON reply per run. Live check on 2 Oct: the key authenticated; a retired model (404) and repeated "high demand" errors (503) all became do nothing instead of a crash.
+- **Trade-off accepted:** stub drafts are fixed text and say nothing about real voice quality; live drafts depend on Gemini being available.
+- **Status:** built (adapter); live drafts not yet reviewed
 
 ## 6. Learning · Suggested rules, founder approves
 
@@ -56,7 +56,25 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Trade-off accepted:** TBD
 - **Status:** planned
 
-## 7. AI use · Assistant reviews and scaffolds; I decide
+## 7. Data · Real founder data kept apart from test data
+
+- **Belief:** tests must not depend on real people, and nothing may be invented in a real founder's name.
+- **Options weighed:** (a) write synthetic evidence under Rico's and Fathin's names, (b) real founders get only observed, sourced evidence; tests use a synthetic founder.
+- **Picked:** (b). `data/founders/` holds only observed items (e.g. Rico's headline and his comment "i just use Byro"). Tests use the synthetic founder "Alex" in `fixtures/`. Every record carries `founder_id`, so one founder's evidence can never ground another's draft.
+- **Proof:** `tests/test_store.py` (only approved evidence loads; every real item is observed and sourced; evidence from another founder is rejected) and `tests/test_gate.py` (Rico cannot use Alex's evidence; Fathin always does nothing).
+- **Trade-off accepted:** Rico has very little evidence, so his drafts are thin; Fathin has none yet. In this proof I approve evidence on the founder's behalf.
+- **Status:** built
+
+## 8. Stack · Python core, plain JavaScript in the browser
+
+- **Belief:** reviewers should need one language and one setup command; all logic worth testing sits in the core.
+- **Options weighed:** (a) Python core + plain JS for the extension and mock feed, (b) TypeScript end to end.
+- **Picked:** (a). Pydantic schemas and pytest for the core; the browser code is small and loads into Chrome without a build step.
+- **Proof:** `./setup.sh` creates the environment, installs, and runs all tests.
+- **Trade-off accepted:** no shared types between the API and the extension; API tests guard the JSON shape instead.
+- **Status:** decided
+
+## 9. AI use · Assistant reviews and scaffolds; I decide
 
 - **Belief:** an AI assistant speeds up review and setup, but every output has to be checked against the brief and my own intent.
 - **Options weighed:** (a) no AI, (b) AI writes the design, (c) AI reviews and scaffolds while the product and design decisions stay mine.
@@ -64,5 +82,6 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Mistakes caught:**
   - It kept my v0 design in the repo with its own added notes, instead of my v1. I caught it; v1 was copied in unchanged and verified byte-for-byte.
   - It counted active time from the clock, including lunch. I corrected the time log.
+  - It set the Gemini model to one no longer offered to new keys. The first live call returned 404; I switched to the model the API named.
 - **Proof:** every AI change is reviewed before commit; claims in the docs point to a file, test, or command output.
 - **Status:** ongoing
