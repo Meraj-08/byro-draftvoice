@@ -11,5 +11,5 @@ Timebox: 10 hours of active work. Times in IST; breaks and waiting not counted.
 | Evidence collection + labelling | within 14:30–18:30 | 0:45 |
 | Browser experience: review panel, mock feed, LinkedIn extension, fixes from live testing | 19:00–21:00 | 2:00 |
 | UI polish and testing; draft fix (relevance and copy checks) and README | 21:45–22:15 | 0:30 |
-| Walkthrough / video preparation | 22:15– | in progress |
-| **Total so far** | | **~8:30** + walkthrough |
+| More fixes from testing, instead of recording the walkthrough: relevance check, drafting loader, Gemini as default, clearer Gemini errors, reading LinkedIn saved posts | 22:15–23:08 | 0:53 |
+| **Total so far** | | **~9:23** |
