@@ -27,6 +27,9 @@
   let picking = false;
   let method = "auto";
   let highlighted = "";
+  let hint = null;
+  let hintFor = null;
+  let ticking = false;
 
   const tab = document.createElement("button");
   tab.id = "draftvoice-tab";
@@ -59,6 +62,7 @@
   }
 
   function sendPost(post, el) {
+    hideHint();
     outline(el);
     send({ type: "draftvoice:post", post, pickable: true });
   }
@@ -133,7 +137,57 @@
     tab.setAttribute("aria-expanded", "false");
     outline(null);
     stopPicking();
+    hideHint();
   }
+
+  // ↻ in the panel: use the post that is on screen now.
+  function refresh() {
+    stopPicking();
+    hideHint();
+    send({ type: "draftvoice:reading" });
+    if (method === "select") return bySelection(true);
+    if (method === "page") return byPage(true);
+    if (!byVisible(false)) byClick();
+  }
+
+  // While the sidebar is open and the founder scrolls, offer "Draft this post" on the post now most
+  // visible. This only looks at where posts are on screen; nothing is read until the button is clicked.
+  function hideHint() {
+    hint?.remove();
+    hint = null;
+    hintFor = null;
+  }
+
+  function updateHint() {
+    ticking = false;
+    if (!root.classList.contains("draftvoice-open") || picking) return hideHint();
+    const el = adapter.mostVisiblePost();
+    if (!el || el === selected) return hideHint();
+    if (!hint) {
+      hint = document.createElement("button");
+      hint.id = "draftvoice-hint";
+      hint.type = "button";
+      hint.textContent = "Draft this post";
+      hint.addEventListener("click", () => {
+        const target = hintFor;
+        hideHint();
+        send({ type: "draftvoice:reading" });
+        useElement(target, "Couldn't read this post. Try another one.");
+      });
+      document.body.append(hint);
+    }
+    hintFor = el;
+    const r = el.getBoundingClientRect();
+    const right = Math.min(r.right, innerWidth - 380) - 12;
+    hint.style.top = `${Math.max(r.top, 0) + 12}px`;
+    hint.style.left = `${Math.max(right - hint.offsetWidth, r.left + 12)}px`;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!root.classList.contains("draftvoice-open") || ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateHint);
+  }, { passive: true });
 
   function stopPicking() {
     picking = false;
@@ -179,6 +233,8 @@
       close();
     } else if (m.type === "draftvoice:pick") {
       byClick();
+    } else if (m.type === "draftvoice:refresh") {
+      refresh();
     } else if (m.type === "draftvoice:method" && ["auto", "page", "click", "select", "visible"].includes(m.method)) {
       method = m.method;
       choose();

@@ -54,7 +54,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
 body {
   background: var(--bg);
   color: var(--text);
@@ -64,20 +64,20 @@ body {
 button, input { font: inherit; color: inherit; }
 svg { width: 16px; height: 16px; flex: none; }
 
-.app { display: flex; flex-direction: column; height: 100vh; max-width: 380px; margin: 0 auto; background: var(--bg); }
+.app { display: flex; flex-direction: column; height: 100vh; width: 100%; max-width: 380px; margin: 0 auto; background: var(--bg); }
 
 /* Header */
 .top {
   position: sticky; top: 0; z-index: 2;
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 8px 8px 16px;
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 8px 8px 16px; min-width: 0;
   background: var(--card); border-bottom: 1px solid var(--line);
 }
-.brand { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; margin-right: auto; }
+.brand { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; margin-right: auto; white-space: nowrap; }
 .logo { color: var(--accent); }
 .switch { display: flex; background: var(--chip); border-radius: 999px; padding: 2px; }
 .switch button {
-  border: 0; background: transparent; border-radius: 999px; padding: 4px 12px;
+  border: 0; background: transparent; border-radius: 999px; padding: 4px 10px;
   color: var(--muted); cursor: pointer; transition: background var(--ease), color var(--ease);
 }
 .switch button[aria-checked="true"] { background: var(--card); color: var(--text); box-shadow: var(--shadow); font-weight: 600; }
@@ -195,7 +195,7 @@ textarea.editor {
 .fine svg { width: 14px; height: 14px; }
 .live { margin-left: auto; display: flex; align-items: center; gap: 4px; cursor: pointer; }
 .method { display: flex; align-items: center; gap: 8px; color: var(--faint); font-size: 12px; }
-.method select { flex: 1; font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line);
+.method select { flex: 1; min-width: 0; font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line);
                  border-radius: 6px; padding: 2px 6px; }
 
 /* Toast */

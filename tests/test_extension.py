@@ -79,3 +79,15 @@ def test_panel_files_are_shared_with_the_mock_feed():
         folder, _ = STATIC[name]
         assert folder == EXT and (EXT / name).exists()
         assert name in MANIFEST["web_accessible_resources"][0]["resources"]
+
+
+def test_scroll_only_offers_a_button_and_reads_nothing():
+    # The scroll listener does nothing unless the sidebar is open, and only positions "Draft this post".
+    listener = CONTENT[CONTENT.index('window.addEventListener("scroll"'):]
+    listener = listener[:listener.index("}, { passive: true });")]
+    assert 'if (!root.classList.contains("draftvoice-open")' in listener
+    update = CONTENT[CONTENT.index("function updateHint()"):CONTENT.index('window.addEventListener("scroll"')]
+    before_click = update[:update.index('hint.addEventListener("click"')] + update[update.index("hintFor = el;"):]
+    assert "readPost" not in before_click and "useElement" not in before_click and "send(" not in before_click
+    # Reading happens only inside the button's click handler.
+    assert 'useElement(target, "Couldn\'t read this post. Try another one.")' in update

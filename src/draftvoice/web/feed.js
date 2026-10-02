@@ -107,6 +107,10 @@
       close();
     } else if (m.type === "draftvoice:pick") {
       startPicking();
+    } else if (m.type === "draftvoice:refresh") {
+      stopPicking();
+      const el = mostVisible();
+      if (el) { send({ type: "draftvoice:reading" }); select(el); }
     } else if (m.type === "draftvoice:reviewed" && m.text && selected) {
       // In LinkedIn you would paste it yourself. Here we only show where it would go.
       selected.querySelector(".comment")?.remove();

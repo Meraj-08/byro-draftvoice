@@ -113,6 +113,7 @@
   $("pick").addEventListener("click", () => tell({ type: "draftvoice:pick" }));
   $("pickAgain").addEventListener("click", () => tell({ type: "draftvoice:pick" }));
   $("close").addEventListener("click", () => tell({ type: "draftvoice:close" }));
+  $("refresh").addEventListener("click", () => tell({ type: "draftvoice:refresh" }));
 
   function showMessage(text) {
     state.post = null;
@@ -332,6 +333,7 @@
       showPost({ author: q.get("author"), headline: q.get("headline"), text: q.get("text") }, false);
       propose();
     }
+    $("refresh").hidden = window.parent === window; // only when a page embeds the panel
     tell({ type: "draftvoice:ready" });
   })();
 })();
