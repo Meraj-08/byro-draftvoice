@@ -74,7 +74,7 @@
 
   function renderFounders() {
     $("founders").innerHTML = state.founders.map((f) =>
-      `<button role="radio" aria-checked="${f.id === state.founder}" data-id="${esc(f.id)}">${esc(f.name)}</button>`).join("");
+      `<button role="radio" aria-checked="${f.id === state.founder}" data-id="${esc(f.id)}"><span class="mini">${esc(f.name[0])}</span>${esc(f.name)}</button>`).join("");
   }
 
   $("founders").addEventListener("click", (e) => {
@@ -132,8 +132,20 @@
         ? `<div class="detail">${esc(step.detail)}</div>` : ""}</div></li>`;
   }
 
+  function setSteps(open, summary) {
+    $("stepsCard").classList.toggle("collapsed", !open);
+    $("stepsToggle").setAttribute("aria-expanded", String(open));
+    $("stepsSum").textContent = summary || "";
+  }
+
+  $("stepsToggle").addEventListener("click", () => {
+    const open = $("stepsCard").classList.contains("collapsed");
+    setSteps(open, $("stepsSum").textContent);
+  });
+
   function loading() {
     $("stepsCard").hidden = false;
+    setSteps(true, "");
     $("steps").innerHTML = stepRow({ label: "Reading the post" }, "running");
     $("result").hidden = false;
     $("result").innerHTML = '<div class="skeleton"><div></div><div></div><div></div></div>';
@@ -174,6 +186,9 @@
       }
     }
     state.proposal = p;
+    const stopped = p.steps.find((s) => s.status === "stopped");
+    if (stopped) setSteps(true, `Stopped at: ${stopped.label.toLowerCase()}`);
+    else setSteps(false, `${p.steps.length} of ${p.steps.length} passed ✓`);
     renderResult();
   }
 
@@ -183,6 +198,7 @@
     const p = state.proposal;
     const box = $("result");
     box.hidden = false;
+    box.classList.remove("is-draft");
     if (p.decision !== "draft") {
       const blocked = p.reason_code === "check_failed";
       const fails = p.checks.filter((c) => !c.passed)
@@ -200,20 +216,29 @@
       return;
     }
     const evidence = Object.fromEntries(p.evidence.map((e) => [e.id, e]));
+    const reaction = p.steps.some((s) => s.key === "drafting" && /past reactions/.test(s.detail));
+    const shown = state.edited != null && state.edited.trim() !== p.draft.trim() ? state.edited : p.draft;
+    const words = shown.trim().split(/\s+/).filter(Boolean).length;
+    const sources = p.evidence.map((e) => `
+      <li><span class="chip">${esc(e.id)}</span><div><div class="ev-text">${esc(e.text)}</div>
+        <div class="ev-src">${esc(e.source)}</div></div></li>`).join("");
     const sentences = p.sentences.map((s) => `<span class="sentence">${esc(s.text)}</span>${s.evidence_ids.map((id) =>
       `<span class="chip" tabindex="0" data-tip="${esc((evidence[id]?.text || "") + " (" + (evidence[id]?.source || "") + ")")}">${esc(id)}</span>`
     ).join("")}`).join(" ");
     const edited = state.edited != null && state.edited.trim() !== p.draft.trim();
     const notes = p.warnings.map((w) => `<div class="note">${esc(w.detail)}. Your call.</div>`).join("");
+    box.classList.add("is-draft");
     box.innerHTML = `
-      <div class="verdict"><span class="badge draft">Comment</span>
-        <span class="meta">${esc(p.founder.name)} · profile v${p.founder.version}</span></div>
+      <div class="verdict"><span class="badge draft">${reaction ? "Reaction" : "Comment"}</span>
+        <span class="meta">${esc(p.founder.name)} · profile v${p.founder.version}</span>
+        <span class="meta words">${words} word${words === 1 ? "" : "s"}</span></div>
       <div id="draftBody">${state.editing
         ? `<textarea class="editor" id="editor" aria-label="Edit the draft">${esc(state.edited ?? p.draft)}</textarea>`
         : edited
           ? `<div class="draft-text">${esc(state.edited)}</div><div class="meta">Your edit. The checks ran on the original draft.</div>`
           : `<div class="draft-text">${sentences}</div>`}</div>
-      ${notes ? `<div class="notes">${notes}</div>` : ""}`;
+      ${notes ? `<div class="notes">${notes}</div>` : ""}
+      ${sources ? `<div class="ev"><div class="label">${reaction ? `${esc(p.founder.name)} wrote this before` : "Evidence behind it"}</div><ul class="ev-list">${sources}</ul></div>` : ""}`;
     $("actions").hidden = state.reviewed;
     $("edit").innerHTML = state.editing ? "Done" : $("edit").dataset.label;
   }

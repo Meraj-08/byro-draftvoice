@@ -40,12 +40,16 @@
       </div>
     </section>
 
-    <section class="card" id="stepsCard" hidden>
-      <div class="label">How DraftVoice decided</div>
+    <section class="card steps-card" id="stepsCard" hidden>
+      <button class="steps-head" id="stepsToggle" type="button" aria-expanded="true" aria-controls="steps">
+        <span class="label">How DraftVoice decided</span>
+        <span class="steps-sum" id="stepsSum"></span>
+        <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <ol class="steps" id="steps"></ol>
     </section>
 
-    <section class="card" id="result" hidden></section>
+    <section class="card result" id="result" hidden></section>
 
     <section class="card empty" id="empty">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>

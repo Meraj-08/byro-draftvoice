@@ -209,3 +209,56 @@ textarea.editor {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Polish ---------- */
+
+/* Founder switcher: initials */
+.switch button { display: inline-flex; align-items: center; gap: 6px; }
+.mini {
+  width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--chip); color: var(--muted); font-size: 9px; font-weight: 700;
+}
+.switch button[aria-checked="true"] .mini { background: var(--accent); color: var(--accent-text); }
+
+/* Post: a quote, not a second headline */
+.post-text { border-left: 2px solid var(--line); padding-left: 8px; color: var(--muted); }
+
+/* Steps: one line once the draft is ready */
+.steps-head {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; margin: 0 0 8px;
+  border: 0; background: none; cursor: pointer; text-align: left;
+}
+.steps-head .label { margin: 0; }
+.steps-sum { margin-left: auto; font-size: 12px; color: var(--ok); font-weight: 500; }
+.chev { width: 14px; height: 14px; color: var(--faint); transition: transform var(--ease); }
+.steps-card.collapsed .steps { display: none; }
+.steps-card.collapsed .steps-head { margin: 0; }
+.steps-card.collapsed .chev { transform: rotate(-90deg); }
+.steps-card:not(.collapsed) .steps-sum:not(:empty) { color: var(--stop); }
+
+/* The draft is the hero */
+.result.is-draft { border-left: 3px solid var(--accent); padding-left: 14px; }
+.result.is-draft .draft-text { font-size: 15px; line-height: 1.6; }
+.verdict .words { margin-left: auto; }
+
+/* Evidence, visible without hovering */
+.ev { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.ev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ev-list li { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; }
+.ev-list .chip { margin: 1px 0 0; cursor: default; }
+.ev-list .chip::after { display: none; }
+.ev-text { font-size: 12px; }
+.ev-src { font-size: 11px; color: var(--faint); }
+
+/* Live model as a switch */
+.live input {
+  appearance: none; -webkit-appearance: none; width: 26px; height: 16px; margin: 0; border-radius: 999px;
+  background: var(--line); position: relative; cursor: pointer; transition: background var(--ease);
+}
+.live input::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--card); box-shadow: 0 1px 2px rgba(0, 0, 0, .2); transition: transform var(--ease);
+}
+.live input:checked { background: var(--accent); }
+.live input:checked::after { transform: translateX(10px); }
+.live input:disabled { opacity: .4; cursor: default; }
