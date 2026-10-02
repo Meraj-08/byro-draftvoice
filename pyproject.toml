@@ -20,7 +20,7 @@ draftvoice = "draftvoice.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-draftvoice = ["web/*.html"]
+draftvoice = ["web/*.html", "web/*.css", "web/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

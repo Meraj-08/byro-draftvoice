@@ -16,6 +16,13 @@ from draftvoice.pipeline import OVERRIDABLE, post_from_text, run
 from draftvoice.store import FIXTURES_DIR, DataError, Founder, list_founders
 
 WEB = Path(__file__).parent / "web"
+# The only files the server hands out. No directory listing, no paths outside web/.
+STATIC = {
+    "feed.html": "text/html; charset=utf-8",
+    "panel.html": "text/html; charset=utf-8",
+    "panel.css": "text/css; charset=utf-8",
+    "panel.js": "text/javascript; charset=utf-8",
+}
 FOUNDERS = ("rico", "fathin")
 DRAFTERS = ("stub", "gemini")
 
@@ -160,8 +167,10 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self._guard():
             return
-        if urlparse(self.path).path in ("/", "/feed"):
-            self._send(200, (WEB / "feed.html").read_bytes(), "text/html; charset=utf-8")
+        path = urlparse(self.path).path
+        name = "feed.html" if path in ("/", "/feed") else path.lstrip("/")
+        if name in STATIC:
+            self._send(200, (WEB / name).read_bytes(), STATIC[name])
             return
         self._json(*handle("GET", self.path))
 

@@ -182,3 +182,26 @@ def test_rules_reject_through_the_api():
     assert post("/api/rules/reject", {"id": suggestion["id"]})[1]["status"] == "rejected"
     status, rules = handle("GET", "/api/rules?founder=rico")
     assert status == 200 and rules["rules"][0]["status"] == "rejected" and rules["active_version"] == {"rico": 1}
+
+
+# The shared review panel
+
+def test_server_serves_the_panel_files(server):
+    for name, kind in [("panel.html", "text/html"), ("panel.css", "text/css"), ("panel.js", "text/javascript")]:
+        status, body, headers = request(f"{server}/{name}")
+        assert status == 200 and headers["Content-Type"].startswith(kind) and body
+
+
+def test_server_only_serves_known_files(server):
+    assert request(server + "/../pyproject.toml")[0] == 404
+    assert request(server + "/api.py")[0] == 404
+
+
+def test_panel_has_no_inline_scripts_or_handlers():
+    # Extension pages (MV3) block inline scripts and inline event handlers.
+    import re
+    from draftvoice.api import WEB
+    html = (WEB / "panel.html").read_text()
+    assert re.findall(r"<script[^>]*>", html) == ['<script src="panel.js">']
+    assert not re.search(r"\son[a-z]+=", html)
+    assert "Nothing is sent to LinkedIn." in html and "untrusted input" in html

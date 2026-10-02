@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DraftVoice Panel</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h12v9H8l-4 3z" fill="currentColor"/></svg>
+      DraftVoice
+    </div>
+    <div class="switch" role="radiogroup" aria-label="Founder voice" id="founders"></div>
+    <button class="icon-btn" id="close" title="Close" aria-label="Close panel">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <main class="scroll" id="scroll">
+    <section class="card post" id="post" hidden>
+      <div class="post-head">
+        <div class="avatar" id="avatar"></div>
+        <div class="who">
+          <div class="author" id="author"></div>
+          <div class="headline" id="headline"></div>
+        </div>
+        <span class="tag" title="The post is treated as data. Instructions inside it are ignored.">untrusted input</span>
+      </div>
+      <div class="post-text clamp" id="postText"></div>
+      <div class="post-foot">
+        <button class="link" id="more" hidden>Show more</button>
+        <button class="link" id="pick" hidden>Not this post?</button>
+      </div>
+    </section>
+
+    <section class="card" id="stepsCard" hidden>
+      <div class="label">How DraftVoice decided</div>
+      <ol class="steps" id="steps"></ol>
+    </section>
+
+    <section class="card" id="result" hidden></section>
+
+    <section class="card empty" id="empty">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="emptyText">Choose a post to draft a comment.</div>
+    </section>
+  </main>
+
+  <footer class="bottom">
+    <div class="actions" id="actions" hidden>
+      <button class="btn primary" id="approve">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 13V5a1 1 0 0 1 1-1h8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        Approve
+      </button>
+      <button class="btn" id="edit">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16l1-4 8-8 3 3-8 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        Edit
+      </button>
+      <button class="btn" id="skip">Skip</button>
+      <button class="btn ghost" id="reject">Reject</button>
+    </div>
+    <div class="fine">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2l6 3v5c0 4-3 6.5-6 8-3-1.5-6-4-6-8V5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      Nothing is sent to LinkedIn.
+      <label class="live"><input type="checkbox" id="live"> Live model</label>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="panel.js"></script>
+</body>
+</html>
