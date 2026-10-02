@@ -69,6 +69,15 @@
       Nothing is sent to LinkedIn.
       <label class="live"><input type="checkbox" id="live"> Live model</label>
     </div>
+    <label class="method" id="methodRow" hidden>Choose post by
+      <select id="method">
+        <option value="auto">Auto (D → C → A → B)</option>
+        <option value="page">D · Single post page</option>
+        <option value="click">B · Click a post</option>
+        <option value="select">C · Highlighted text</option>
+        <option value="visible">A · Most visible post</option>
+      </select>
+    </label>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

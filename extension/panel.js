@@ -298,6 +298,12 @@
       loading();
     } else if (m.type === "draftvoice:error") {
       showMessage(m.message || "Couldn't read this post. Try scrolling it into view.");
+    } else if (m.type === "draftvoice:host" && m.methods) {
+      $("methodRow").hidden = false;
+      if (m.method) $("method").value = m.method;
+    } else if (m.type === "draftvoice:prompt") {
+      showMessage(m.message);
+      $("pickAgain").hidden = true; // already waiting for a click on a post
     }
   });
 
@@ -307,6 +313,9 @@
     if (!state.founder) state.founder = state.founders.some((f) => f.id === saved) ? saved : state.founders[0]?.id;
     renderFounders();
   }
+
+  // On LinkedIn the content script says so, and the founder can choose how the post is picked.
+  $("method").addEventListener("change", () => tell({ type: "draftvoice:method", method: $("method").value }));
 
   $("live").checked = store("draftvoice.live") === "1";
   $("live").addEventListener("change", () => store("draftvoice.live", $("live").checked ? "1" : "0"));

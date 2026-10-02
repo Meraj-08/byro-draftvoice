@@ -2,6 +2,13 @@
 // founder chooses, only when they click. Until the tab is clicked, this script only adds the tab.
 // It never scrolls, never reads the feed in the background, never stores LinkedIn content,
 // never types into LinkedIn, and never posts. Approve in the panel only copies to the clipboard.
+//
+// How the post is chosen (the founder can switch this in the panel):
+//   auto       D, then C, then A, and B if none of them finds a post
+//   page    D  on a single post page, its one post
+//   click   B  the founder clicks the post they want
+//   select  C  the text the founder highlighted before clicking the tab
+//   visible A  the post with the largest visible area
 (() => {
   "use strict";
   if (window.top !== window || document.getElementById("draftvoice-tab")) return;
@@ -9,13 +16,17 @@
   const adapter = window.DraftVoiceLinkedIn;
   const PANEL = chrome.runtime.getURL("panel.html");
   const PANEL_ORIGIN = new URL(PANEL).origin;
+  const root = document.documentElement;
 
   let drawer = null;
   let frame = null;
   let ready = false;
   let queued = [];
   let selected = null;
+  let hovered = null;
   let picking = false;
+  let method = "auto";
+  let highlighted = "";
 
   const tab = document.createElement("button");
   tab.id = "draftvoice-tab";
@@ -47,27 +58,78 @@
     el?.classList.add("draftvoice-selected");
   }
 
-  function readAndSend(el) {
-    send({ type: "draftvoice:reading" });
-    const post = adapter.readPost(el);
-    if (!post) {
-      outline(null);
-      send({ type: "draftvoice:error", message: "Couldn't read this post. Try scrolling it into view." });
-      return;
-    }
+  function sendPost(post, el) {
     outline(el);
     send({ type: "draftvoice:post", post, pickable: true });
   }
 
+  function fail(message) {
+    outline(null);
+    send({ type: "draftvoice:error", message });
+  }
+
+  function useElement(el, failure) {
+    const post = adapter.readPost(el);
+    if (!post) {
+      if (failure) fail(failure);
+      return false;
+    }
+    sendPost(post, el);
+    return true;
+  }
+
+  // D
+  function byPage(strict) {
+    if (!adapter.isSinglePostPage()) {
+      if (strict) fail("Open a single post first (click its timestamp), then click the tab.");
+      return false;
+    }
+    return useElement(adapter.singlePagePost(), strict && "Couldn't read this post. Try scrolling it into view.");
+  }
+
+  // C
+  function bySelection(strict) {
+    if (highlighted.length < 20) {
+      if (strict) fail("Highlight the post's text first, then click the tab.");
+      return false;
+    }
+    sendPost({ author: "", headline: "Highlighted text", text: highlighted }, null);
+    return true;
+  }
+
+  // A
+  function byVisible(strict) {
+    return useElement(adapter.mostVisiblePost(), strict && "Couldn't read this post. Try scrolling it into view.");
+  }
+
+  // B
+  function byClick() {
+    outline(null);
+    picking = true;
+    root.classList.add("draftvoice-picking");
+    send({ type: "draftvoice:prompt", message: "Click the post you want to draft for." });
+  }
+
+  function choose() {
+    stopPicking();
+    send({ type: "draftvoice:reading" });
+    if (method === "page") return byPage(true);
+    if (method === "select") return bySelection(true);
+    if (method === "visible") return byVisible(true);
+    if (method === "click") return byClick();
+    if (byPage(false) || bySelection(false) || byVisible(false)) return;
+    byClick();
+  }
+
   function open() {
     ensureDrawer();
-    document.documentElement.classList.add("draftvoice-open");
+    root.classList.add("draftvoice-open");
     tab.setAttribute("aria-expanded", "true");
-    readAndSend(adapter.mostVisiblePost());
+    choose();
   }
 
   function close() {
-    document.documentElement.classList.remove("draftvoice-open");
+    root.classList.remove("draftvoice-open");
     tab.setAttribute("aria-expanded", "false");
     outline(null);
     stopPicking();
@@ -75,13 +137,25 @@
 
   function stopPicking() {
     picking = false;
-    document.documentElement.classList.remove("draftvoice-picking");
+    root.classList.remove("draftvoice-picking");
+    hovered?.classList.remove("draftvoice-hover");
+    hovered = null;
   }
 
-  tab.addEventListener("click", () =>
-    document.documentElement.classList.contains("draftvoice-open") ? close() : open());
+  // C: remember the highlighted text at the moment the founder presses the tab.
+  tab.addEventListener("mousedown", () => { highlighted = String(window.getSelection() || "").trim(); });
+  tab.addEventListener("click", () => (root.classList.contains("draftvoice-open") ? close() : open()));
 
-  // "Not this post?": the founder's next click on a post selects it instead (and does nothing else).
+  // B: only while picking. Hover shows which post a click would choose; the click selects it and does nothing else.
+  document.addEventListener("mouseover", (e) => {
+    if (!picking) return;
+    const el = adapter.postAt(e.target);
+    if (el === hovered) return;
+    hovered?.classList.remove("draftvoice-hover");
+    hovered = el;
+    el?.classList.add("draftvoice-hover");
+  }, true);
+
   document.addEventListener("click", (e) => {
     if (!picking || e.target === tab || drawer?.contains(e.target)) return;
     const el = adapter.postAt(e.target);
@@ -89,7 +163,8 @@
     e.preventDefault();
     e.stopPropagation();
     stopPicking();
-    readAndSend(el);
+    send({ type: "draftvoice:reading" });
+    useElement(el, "Couldn't read this post. Try another one.");
   }, true);
 
   window.addEventListener("message", (e) => {
@@ -97,13 +172,16 @@
     const m = e.data || {};
     if (m.type === "draftvoice:ready") {
       ready = true;
+      frame.contentWindow.postMessage({ type: "draftvoice:host", methods: true, method }, PANEL_ORIGIN);
       queued.forEach((q) => frame.contentWindow.postMessage(q, PANEL_ORIGIN));
       queued = [];
     } else if (m.type === "draftvoice:close") {
       close();
     } else if (m.type === "draftvoice:pick") {
-      picking = true;
-      document.documentElement.classList.add("draftvoice-picking");
+      byClick();
+    } else if (m.type === "draftvoice:method" && ["auto", "page", "click", "select", "visible"].includes(m.method)) {
+      method = m.method;
+      choose();
     }
   });
 })();

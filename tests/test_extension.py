@@ -47,10 +47,23 @@ def test_content_script_never_scrolls_watches_stores_types_or_posts():
 
 
 def test_nothing_runs_before_the_tab_is_clicked():
-    # At load the script only creates the tab; reading happens inside open() and the pick handler.
+    # At load the script only creates the tab and listeners. Reading happens in choose(), which only
+    # open() (the tab), the panel's method switch, and a click while picking can reach.
     top_level = CONTENT.split("function send(")[0]
-    assert "readPost" not in top_level and "mostVisiblePost" not in top_level
-    assert re.search(r"function open\(\)[^}]*readAndSend\(adapter\.mostVisiblePost\(\)\)", CONTENT, re.S)
+    assert "readPost" not in top_level and "mostVisiblePost" not in top_level and "getSelection" not in top_level
+    assert re.search(r"function open\(\) \{[^}]*choose\(\);", CONTENT)
+    # Highlighted text is read only when the tab is pressed.
+    assert re.findall(r".*getSelection.*", CONTENT) == [
+        '  tab.addEventListener("mousedown", () => { highlighted = String(window.getSelection() || "").trim(); });']
+    # Hover and click handlers do nothing unless the founder started picking.
+    assert CONTENT.count("if (!picking") == 2
+
+
+def test_auto_tries_the_methods_in_the_agreed_order():
+    assert "if (byPage(false) || bySelection(false) || byVisible(false)) return;\n    byClick();" in CONTENT
+    panel = (EXT / "panel.html").read_text()
+    for value in ("auto", "page", "click", "select", "visible"):
+        assert f'value="{value}"' in panel
 
 
 def test_panel_messages_never_hand_the_comment_to_linkedin():

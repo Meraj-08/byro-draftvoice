@@ -194,6 +194,9 @@ textarea.editor {
 .fine { display: flex; align-items: center; gap: 6px; color: var(--faint); font-size: 12px; }
 .fine svg { width: 14px; height: 14px; }
 .live { margin-left: auto; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.method { display: flex; align-items: center; gap: 8px; color: var(--faint); font-size: 12px; }
+.method select { flex: 1; font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line);
+                 border-radius: 6px; padding: 2px 6px; }
 
 /* Toast */
 .toast {

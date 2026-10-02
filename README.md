@@ -38,7 +38,9 @@ Use it on LinkedIn (Chrome):
 2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, and choose the `extension/` folder.
 3. On LinkedIn, scroll to a post and click the blue **DraftVoice** tab on the right edge.
 
-What the extension reads: only the one post most visible on screen (author, headline, and text), and only when you click the tab or pick a post with "Not this post?". It never scrolls, reads the feed in the background, stores anything from LinkedIn, types into LinkedIn, or posts. Approve copies the comment; you paste it yourself. It can reach only linkedin.com and this machine's DraftVoice server. Fathin gave written permission for this scope on 2 Oct 2026 (see the decision log).
+Choosing the post: the sidebar footer has **Choose post by**. **Auto** tries, in order: D, the post on a single post page (open a post by clicking its timestamp); C, text you highlighted before clicking the tab; A, the post most visible on screen; and if none of these finds a post, B, "click the post you want" (posts get a dashed outline as you hover). Each method can also be chosen on its own.
+
+What the extension reads: only the one post you choose (author, headline, and text, or just the text you highlighted), and only after you click the tab. It never scrolls, reads the feed in the background, stores anything from LinkedIn, types into LinkedIn, or posts. Approve copies the comment; you paste it yourself. It can reach only linkedin.com and this machine's DraftVoice server. Fathin gave written permission for this scope on 2 Oct 2026 (see the decision log).
 
 Review a draft from the terminal instead. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
 
