@@ -5,6 +5,8 @@
 //   1. Known LinkedIn class names (fast, but LinkedIn renames them).
 //   2. Structure: the nearest block that has an author link (/in/ or /company/) and a Like button.
 //      This does not depend on class names.
+// Saved posts (/my-items/saved-posts/) are a list of results, not feed posts: no Like button, but each
+// item links to the post. So the structure fallback also accepts an author link plus a link to a post.
 (() => {
   "use strict";
 
@@ -13,23 +15,33 @@
     "div[data-urn^='urn:li:activity']",
     "div[data-id^='urn:li:activity']",
     "[data-view-name='feed-full-update']",
+    // Saved posts and other result lists
+    "[data-chameleon-result-urn^='urn:li:activity']",
+    "li.reusable-search__result-container",
+    "div.entity-result",
   ];
   const AUTHOR = [
     ".update-components-actor__title span[aria-hidden='true']",
     ".update-components-actor__name span[aria-hidden='true']",
     ".update-components-actor__title",
+    ".entity-result__title-text a span[aria-hidden='true']",
+    ".entity-result__title-text a",
   ];
   const HEADLINE = [
     ".update-components-actor__description span[aria-hidden='true']",
     ".update-components-actor__description",
+    ".entity-result__primary-subtitle",
   ];
   const TEXT = [
     ".update-components-text",
     ".feed-shared-inline-show-more-text",
     ".feed-shared-update-v2__description",
+    ".entity-result__content-summary",
+    ".entity-result__summary",
   ];
   const AUTHOR_LINK = "a[href*='/in/'], a[href*='/company/']";
   const LIKE = "button[aria-label*='Like' i], button[aria-label*='React' i]";
+  const POST_LINK = "a[href*='/feed/update/'], a[href*='/posts/']";
   const SINGLE_POST_PATH = /^\/(feed\/update|posts)\//;
 
   const clean = (s) => (s || "").replace(/ /g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
@@ -51,6 +63,19 @@
     return null;
   }
 
+  // Saved posts: from a link to a post, walk up to the smallest block with an author link and real text.
+  // Text is required so the block is the whole item, not just its header.
+  function savedContainerFrom(el) {
+    for (let n = el; n && n !== document.body; n = n.parentElement) {
+      if (n.querySelector?.(AUTHOR_LINK) && longestText(n).length >= 40) return n;
+    }
+    return null;
+  }
+
+  function innermost(found) {
+    return [...found].filter((c) => ![...found].some((o) => o !== c && c.contains(o)));
+  }
+
   function posts() {
     for (const sel of POST) {
       const found = [...document.querySelectorAll(sel)].filter((el) => !el.parentElement?.closest(sel));
@@ -62,7 +87,13 @@
       const c = containerFrom(like);
       if (c) seen.add(c);
     }
-    return [...seen].filter((c) => ![...seen].some((o) => o !== c && c.contains(o)));
+    if (seen.size) return innermost(seen);
+    // No Like buttons, as on saved posts: one container per post link.
+    for (const link of document.querySelectorAll(POST_LINK)) {
+      const c = savedContainerFrom(link);
+      if (c) seen.add(c);
+    }
+    return innermost(seen);
   }
 
   function visibleArea(el) {
@@ -83,7 +114,7 @@
       const el = target.closest?.(sel);
       if (el) return el;
     }
-    return containerFrom(target);
+    return containerFrom(target) || posts().find((p) => p.contains(target)) || null;
   }
 
   // D: on a single post page there is one main post.
