@@ -252,7 +252,7 @@ The samples are small, so read these as directional. The report lists known gaps
 
 ## Status
 
-The proof is built: gate, checks V1–V7, eval, learning from edits, local API, mock feed, and LinkedIn extension, with 187 tests. Not done yet: a design-partner session with the founders, and the next experiment (20 real posts with them, measuring light vs. heavy edits and overruled skips).
+**Finished** (2 Oct 2026). The proof is built: gate, checks V1–V7, eval, learning from edits, local API, mock feed, and LinkedIn extension, with 187 tests. Not done: a design-partner session with the founders, and the next experiment (20 real posts with them, measuring light vs. heavy edits and overruled skips).
 
 ## Boundaries
 

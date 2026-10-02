@@ -101,7 +101,7 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
   - Its first fix for milestones ("raised + an amount") fired on a prompt-injection post. The test suite caught it; the rule was removed and a test now guards it.
   - Its first eval reported "35/35 lies blocked" as if it were a measurement. I asked for unseen lies and real data with the checks frozen; the honest numbers are 14/20 unseen lies blocked and 4/10 real contributions passing.
 - **Proof:** every AI change is reviewed before commit; claims in the docs point to a file, test, or command output.
-- **Status:** ongoing
+- **Status:** done
 
 ## 11. Relevance and copying · The evidence must be about the post, and the draft must answer it
 
