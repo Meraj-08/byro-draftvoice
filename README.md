@@ -144,7 +144,7 @@ sequenceDiagram
 | --- | --- |
 | `draftvoice propose --founder rico --text "..."` | Draft a comment for pasted text, or do nothing |
 | `draftvoice propose --founder rico --post p-agents` | Use a synthetic post from `fixtures/posts.json` |
-| `draftvoice propose ... --drafter gemini` | Write a live draft (the CLI default is `MODEL_MODE` in `.env`, else `stub`) |
+| `draftvoice propose ... --drafter gemini` | Write a live draft (default: Gemini when a key is set, else `stub`; `MODEL_MODE` overrides) |
 | `draftvoice propose ... --drafter dishonest-number` | A stub that lies on purpose (also `-name`, `-first_person`, `-unknown_evidence`, `-bad_json`) |
 | `draftvoice review pr-1a2b3c4d --accept` | Review a draft: `--accept`, `--edit "..."`, `--reject`, `--skip` |
 | `draftvoice rules` | List suggested voice rules (one appears after the same edit twice) |
