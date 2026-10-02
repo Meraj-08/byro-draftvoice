@@ -15,12 +15,9 @@ Founder-controlled comment review for LinkedIn. Built for the Byro technical cha
 
 ```bash
 ./setup.sh
-.venv/bin/draftvoice propose --founder rico --text "Does your LinkedIn profile matter before an investor meeting?"
 ```
 
-`setup.sh` needs Python 3.11+. It creates `.venv`, installs DraftVoice, and runs the tests. No API key or network access is needed.
-
-DraftVoice either drafts a comment, with the evidence behind each sentence and the result of every check, or says why it does nothing. The founder is `rico` or `fathin` (`alex` is synthetic test data).
+Needs Python 3.11+. It creates `.venv`, installs DraftVoice, and runs the tests. No API key or network access is needed.
 
 For live drafts, copy the example settings and add your Gemini key:
 
@@ -145,6 +142,14 @@ sequenceDiagram
 | voice rules | Never blocks: length, case, and emoji notes only |
 
 ## Usage
+
+Try one post from the terminal:
+
+```bash
+.venv/bin/draftvoice propose --founder rico --text "Does your LinkedIn profile matter before an investor meeting?"
+```
+
+DraftVoice either drafts a comment, with the evidence behind each sentence and the result of every check, or says why it does nothing. The founder is `rico` or `fathin` (`alex` is synthetic test data). To see it in the browser instead, run `.venv/bin/draftvoice serve` (see [Browser](#browser)).
 
 | Command | Purpose |
 | --- | --- |
