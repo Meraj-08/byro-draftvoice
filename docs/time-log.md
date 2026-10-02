@@ -10,5 +10,6 @@ Timebox: 10 hours of active work. Times in IST; breaks and waiting not counted.
 | Proof build: gate, checks, eval, learning (commits 1–8) | 14:30–18:30 | 3:15 |
 | Evidence collection + labelling | within 14:30–18:30 | 0:45 |
 | Browser experience: review panel, mock feed, LinkedIn extension, fixes from live testing | 19:00–21:00 | 2:00 |
-| UI polish and testing | 21:45– | in progress |
-| **Total so far** | | **~8:00** + UI polish |
+| UI polish and testing; draft fix (relevance and copy checks) and README | 21:45–22:15 | 0:30 |
+| Walkthrough / video preparation | 22:15– | in progress |
+| **Total so far** | | **~8:30** + walkthrough |
