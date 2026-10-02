@@ -4,9 +4,17 @@ Founder-controlled comment review for LinkedIn. Byro technical challenge: help a
 
 **The model proposes, the application validates, the founder decides.** When a post is irrelevant or no approved evidence supports a contribution, the system does nothing.
 
+## Run
+
+```bash
+./setup.sh
+```
+
+Needs Python 3.11+. Creates `.venv`, installs DraftVoice, and runs the tests. No API key or network access to a model is needed.
+
 ## Status
 
-Design stage. No code yet.
+Proof in progress.
 
 - [Design (v1, before user research)](docs/design.md)
 - [Decision log: assumptions, alternatives, AI use](docs/decision-log.md)
