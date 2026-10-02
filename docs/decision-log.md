@@ -15,10 +15,10 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 
 - **Belief:** public posts and comments, copied by hand, are enough to understand voice and topics.
 - **Options weighed:** (a) manual copying, (b) an extension reading pages I open, (c) the founder's own data export.
-- **Picked:** (a) now; asked the founders about (b); (c) is the production path.
-- **Proof:** TBD, founder reply quoted with date in `evidence.md`; every item has a source and label.
+- **Picked:** (a); (c) is the production path.
+- **Proof:** on 2 Oct 2026 (14:38 IST) I asked Fathin whether he preferred manual copying or a small tool that collects as I browse. He replied "Yes" (14:38 IST, chat). I read this as approval of manual collection. It does not clearly choose the tool, so no tool is built. Every item in `evidence.md` has a source and label.
 - **Trade-off accepted:** a small sample, and my picks may be biased toward longer comments.
-- **Status:** waiting on founders
+- **Status:** decided; no design-partner call was held
 
 ## 3. Engage decision · Code owns it
 
