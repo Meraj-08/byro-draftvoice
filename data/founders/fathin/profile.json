@@ -2,7 +2,99 @@
   "founder_id": "fathin",
   "display_name": "Fathin",
   "version": 1,
-  "topics": {},
-  "rules": [],
-  "examples": []
+  "topics": {
+    "ai-agents": [
+      "ai agent",
+      "ai agents",
+      "agentic",
+      "browser agent",
+      "browser agents",
+      "coding agent",
+      "coding agents",
+      "shared memory",
+      "multi-agent",
+      "agent memory",
+      "agent graph",
+      "agent graphs",
+      "workflow graph",
+      "bots",
+      "agent identity",
+      "otp",
+      "verification",
+      "agent",
+      "agents",
+      "bot"
+    ],
+    "ai-reliability": [
+      "reliability",
+      "reliable",
+      "production",
+      "prototype",
+      "pilot",
+      "evaluation",
+      "evals",
+      "failure",
+      "failures",
+      "survives real users",
+      "prove it",
+      "actually finished",
+      "release gate",
+      "goes live",
+      "go live",
+      "recovery",
+      "receipt",
+      "minimum access"
+    ],
+    "ai-governance": [
+      "ai act",
+      "eu ai act",
+      "transparency",
+      "governance",
+      "compliance",
+      "human review",
+      "human approval",
+      "human in the loop",
+      "permissions",
+      "access control"
+    ],
+    "retrieval": [
+      "vector database",
+      "vector databases",
+      "retrieval",
+      "rag",
+      "semantic search",
+      "pgvector",
+      "embeddings"
+    ],
+    "ai-writing": [
+      "ai slop",
+      "anti-slop",
+      "ai-generated",
+      "ai comments"
+    ]
+  },
+  "rules": [
+    {
+      "id": "r-001",
+      "text": "Technical replies: two or three full sentences, about 25 to 60 words, normal capitalisation."
+    },
+    {
+      "id": "r-002",
+      "text": "Open with agreement or a short verdict, then name the harder problem."
+    },
+    {
+      "id": "r-003",
+      "text": "May end with a genuine question to the author."
+    },
+    {
+      "id": "r-004",
+      "text": "At most one emoji, usually 🙂‍↕️ or ✍🏾."
+    }
+  ],
+  "examples": [
+    "The Claude Code example says it all: retrieval is a workload decision, not a vector database decision. Sometimes semantic search wins. Sometimes grep does.🙂‍↕️",
+    "Interesting direction. Shared memory is useful, but the harder problem is deciding what the team should trust.",
+    "When mastery of anti-slop skill ascends 🙂‍↕️",
+    "Also, your boy 🐦‍⬛ Rook clearly understands positioning."
+  ]
 }

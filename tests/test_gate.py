@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from draftvoice.gate import decide
@@ -66,7 +68,27 @@ def test_founders_do_not_share_evidence():
     assert all(e.founder_id == "rico" for e in result.evidence)
 
 
-def test_founder_without_evidence_always_does_nothing():
-    fathin = load_founder("fathin")
+def test_founder_without_evidence_always_does_nothing(tmp_path):
+    folder = tmp_path / "empty"
+    folder.mkdir()
+    (folder / "profile.json").write_text(json.dumps({
+        "founder_id": "empty", "display_name": "Empty", "version": 1,
+        "topics": {"ai-agents": ["ai agents"]},
+    }))
+    (folder / "evidence.json").write_text("[]")
+    founder = load_founder("empty", tmp_path)
     for fixture in FIXTURES:
-        assert not decide(fixture.post, fathin).engage
+        assert not decide(fixture.post, founder).engage
+
+
+def test_same_post_routes_to_each_founders_own_evidence():
+    post = Post(id="t", text="Shipping AI agents to production is mostly about reliability.",
+                source="test", label="synthetic")
+    fathin = decide(post, load_founder("fathin"))
+    assert fathin.engage
+    assert all(e.founder_id == "fathin" for e in fathin.evidence)
+
+
+def test_expired_evidence_is_not_used():
+    fathin = load_founder("fathin")
+    assert "FD-13" not in {e.id for e in fathin.evidence}

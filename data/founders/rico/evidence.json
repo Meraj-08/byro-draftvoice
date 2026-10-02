@@ -3,9 +3,97 @@
     "id": "PUB-01",
     "founder_id": "rico",
     "text": "Founder @ Byro | Building the AI Head of Content for high-growth teams",
-    "topics": ["linkedin-content", "ai-writing"],
+    "topics": [
+      "linkedin-content",
+      "ai-writing"
+    ],
     "use": "claim",
     "source": "LinkedIn profile headline, viewed 2 Oct 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-02",
+    "founder_id": "rico",
+    "text": "Byro is five people and is hiring a sixth and seventh: one technical, one in marketing.",
+    "topics": [
+      "startup-building"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 28 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-03",
+    "founder_id": "rico",
+    "text": "Byro got accepted into the TooEarly Ventures validation programme.",
+    "topics": [
+      "startup-building"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 29 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-04",
+    "founder_id": "rico",
+    "text": "Byro helps B2B teams turn the knowledge inside their company into content without everyone taking on a second job in marketing.",
+    "topics": [
+      "linkedin-content",
+      "ai-writing"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 29 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-05",
+    "founder_id": "rico",
+    "text": "Our joke post about closing €20 in strategic angel funding got about 4,273 reactions.",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 15 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-06",
+    "founder_id": "rico",
+    "text": "Our fake funding announcement brought 4,200 likes, 1,000 new followers, and real sign-ups.",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 22 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-07",
+    "founder_id": "rico",
+    "text": "Getting a product from 70% to launch is mostly unglamorous fixes: edge cases, drop-off flows, silent webhook failures.",
+    "topics": [
+      "startup-building"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 14 Sep 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "PUB-08",
+    "founder_id": "rico",
+    "text": "Rico's own posts end with [ Written by Byro ].",
+    "topics": [
+      "ai-writing"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn posts, Sep 2026",
     "label": "observed",
     "approved": true
   },
@@ -13,9 +101,219 @@
     "id": "RS-01",
     "founder_id": "rico",
     "text": "i just use Byro",
-    "topics": ["linkedin-content"],
+    "topics": [
+      "linkedin-content"
+    ],
     "use": "both",
-    "source": "LinkedIn comment on a post about finding post ideas, ~29 Sep 2026",
+    "source": "Rico's LinkedIn activity page, viewed 2 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-20",
+    "founder_id": "rico",
+    "text": "my man you should've posted this in the morning",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn activity page, viewed 2 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-21",
+    "founder_id": "rico",
+    "text": "it does, post between 8:30-9:15 am",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn activity page, viewed 2 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-35",
+    "founder_id": "rico",
+    "text": "ai comment?",
+    "topics": [
+      "ai-writing"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn activity page, viewed 2 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-36",
+    "founder_id": "rico",
+    "text": "magic of Byro",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn activity page, viewed 2 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-06",
+    "founder_id": "rico",
+    "text": "dev velocity with cursor and agentic tooling means two people can build what used to take a 6-person engineering team.",
+    "topics": [
+      "startup-building"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 7 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-07",
+    "founder_id": "rico",
+    "text": "we killed a profitable agency doing 4-figure MRR to sit on the floor building software. every time we took on a new B2B client for executive positioning, 80% of the work was repetitive manual data plumbing.",
+    "topics": [
+      "startup-building",
+      "founder-reputation"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 11 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-08",
+    "founder_id": "rico",
+    "text": "when every startup has access to the exact same llms and api wrappers, technical execution becomes baseline table stakes.",
+    "topics": [
+      "ai-writing",
+      "startup-building"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 9 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-10",
+    "founder_id": "rico",
+    "text": "the posts aren't the point. the posts are just the door.",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 13 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-12",
+    "founder_id": "rico",
+    "text": "the best reputation work always has a human in the loop.",
+    "topics": [
+      "ai-writing",
+      "founder-reputation"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 11 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-13",
+    "founder_id": "rico",
+    "text": "scared is fine. late is worse.",
+    "topics": [
+      "startup-building"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 10 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-14",
+    "founder_id": "rico",
+    "text": "the ones who close faster almost always have one thing in common: their reputation shows up before they do.",
+    "topics": [
+      "founder-reputation"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 3 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-16",
+    "founder_id": "rico",
+    "text": "followers are a vanity metric until they map to revenue.",
+    "topics": [
+      "linkedin-content",
+      "founder-reputation"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 29 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-17",
+    "founder_id": "rico",
+    "text": "so we built Byro — reputation infrastructure for founding + gtm teams in the region.",
+    "topics": [
+      "founder-reputation"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 27 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-18",
+    "founder_id": "rico",
+    "text": "founders and teams can use their real story online, sound like themselves, and build actual trust instead of adding to the AI slop.",
+    "topics": [
+      "ai-writing"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 10 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-19",
+    "founder_id": "rico",
+    "text": "you post while you're still building the thing.",
+    "topics": [
+      "linkedin-content"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 6 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-20",
+    "founder_id": "rico",
+    "text": "your linkedin is now a pre-diligence layer. if you're invisible, you're harder to source.",
+    "topics": [
+      "founder-reputation"
+    ],
+    "use": "claim",
+    "source": "Rico's LinkedIn post, 24 Jun 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RP-25",
+    "founder_id": "rico",
+    "text": "visibility isn't the same as presence.",
+    "topics": [
+      "founder-reputation"
+    ],
+    "use": "both",
+    "source": "Rico's LinkedIn post, 22 May 2026 (docs/evidence.md)",
     "label": "observed",
     "approved": true
   }

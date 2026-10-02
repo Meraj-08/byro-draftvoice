@@ -1,1 +1,263 @@
-[]
+[
+  {
+    "id": "FP-01",
+    "founder_id": "fathin",
+    "text": "A policy document cannot answer those questions inside the product. A working system can.",
+    "topics": [
+      "ai-governance",
+      "ai-reliability"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 28 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-02",
+    "founder_id": "fathin",
+    "text": "Browser agents do not usually fail at clicking buttons. They fail where the workflow becomes real: authentication, state, timeouts, and ownership.",
+    "topics": [
+      "ai-agents",
+      "ai-reliability"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 27 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-03",
+    "founder_id": "fathin",
+    "text": "Reliability IS the product. A demo that works 80% of the time isn't 80% done; it's a liability.",
+    "topics": [
+      "ai-reliability"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn post, 23 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-03b",
+    "founder_id": "fathin",
+    "text": "I've built AI for aviation document checks, identity infra for agents, and a few things still cooking.",
+    "topics": [
+      "ai-agents",
+      "ai-reliability"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 23 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-05",
+    "founder_id": "fathin",
+    "text": "When mastery of anti-slop skill ascends 🙂‍↕️",
+    "topics": [
+      "ai-writing"
+    ],
+    "use": "voice",
+    "source": "Fathin's LinkedIn comment, ~28 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-07",
+    "founder_id": "fathin",
+    "text": "retrieval is a workload decision, not a vector database decision. Sometimes semantic search wins. Sometimes grep does.",
+    "topics": [
+      "retrieval"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn comment, ~28 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-08",
+    "founder_id": "fathin",
+    "text": "transparency has to become something inspectable inside the system: where AI appears, what the user is told, what is recorded, when a person reviews it, and who can stop it.",
+    "topics": [
+      "ai-governance"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn comment, ~21 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-09",
+    "founder_id": "fathin",
+    "text": "Shared memory is useful, but the harder problem is deciding what the team should trust: what becomes shared knowledge, what stays provisional, and which actions still need human approval.",
+    "topics": [
+      "ai-agents"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn comment, ~27 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-12",
+    "founder_id": "fathin",
+    "text": "every AI use case gets a named owner, known data and actions, recorded controls, and a clear review or stop path.",
+    "topics": [
+      "ai-governance"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn comment, ~28 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FD-13",
+    "founder_id": "fathin",
+    "text": "the European Commission published its transparency guidance on 20 July. The relevant obligations start applying on 2 August 2026",
+    "topics": [
+      "ai-governance"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn comment, ~28 Jul 2026 (docs/evidence.md); time-bound, true as of July 2026",
+    "label": "observed",
+    "approved": false
+  },
+  {
+    "id": "FD-14",
+    "founder_id": "fathin",
+    "text": "what helped most was surfacing operational state, rather than trying to infer the model's reasoning: the current stage, last transition, why it changed, who owns the next action, and whether it's retryable.",
+    "topics": [
+      "ai-agents",
+      "ai-reliability"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn comment, ~27 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-04",
+    "founder_id": "fathin",
+    "text": "Been building AgentSIM to give AI agents their own managed identity. First piece is live: SMS sign-in for apps you own.",
+    "topics": [
+      "ai-agents"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 1 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-04b",
+    "founder_id": "fathin",
+    "text": "100+ people have signed up so far.",
+    "topics": [
+      "ai-agents"
+    ],
+    "use": "claim",
+    "source": "AgentSIM company post shared by Fathin, 1 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-07",
+    "founder_id": "fathin",
+    "text": "I run 25+ Grok Bots inside Codes Devs. 25 roles do not create 25 security boundaries.",
+    "topics": [
+      "ai-agents",
+      "ai-governance"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 1 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-07b",
+    "founder_id": "fathin",
+    "text": "my rule now is simple: one clear outcome per Bot, minimum access, approval before it sends, pays, or publishes, a receipt before I call anything done, a human who owns the consequence.",
+    "topics": [
+      "ai-agents",
+      "ai-governance",
+      "ai-reliability"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn post, 1 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-08",
+    "founder_id": "fathin",
+    "text": "Agent memory isn't just storage. It's deciding what deserves to survive, who can trust it, and how it gets corrected or deleted.",
+    "topics": [
+      "ai-agents"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn post, 28 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-10",
+    "founder_id": "fathin",
+    "text": "Before I grant more access, I need proof of the external outcome, the authority used, the recovery path, and the stopping condition.",
+    "topics": [
+      "ai-agents",
+      "ai-reliability"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn post, 21 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-14",
+    "founder_id": "fathin",
+    "text": "A workflow graph defines where work may go next. It does not automatically preserve which node ran, which artifact it used, why a route fired, or what failed.",
+    "topics": [
+      "ai-agents"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 10 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-14b",
+    "founder_id": "fathin",
+    "text": "a relationship is not evidence. You still need to check the source.",
+    "topics": [
+      "retrieval",
+      "ai-agents"
+    ],
+    "use": "both",
+    "source": "Fathin's LinkedIn post, 10 Aug 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-16",
+    "founder_id": "fathin",
+    "text": "This one covers five decisions a team must make before an AI workflow goes live.",
+    "topics": [
+      "ai-reliability"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 31 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "FP-17",
+    "founder_id": "fathin",
+    "text": "We build it with the people who will own it, then leave them with the code, documentation and control.",
+    "topics": [
+      "ai-reliability"
+    ],
+    "use": "claim",
+    "source": "Fathin's LinkedIn post, 27 Jul 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  }
+]
