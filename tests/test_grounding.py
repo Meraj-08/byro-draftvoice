@@ -17,6 +17,30 @@ SCREENPIPE = (
     "and a small AI agent reads the OCR every 5 minutes and logs which project you were working on. "
     "No more filling in timesheets on Friday. Demo below, code is open source."
 )
+TEAM_CULTURE = """Every day at 1 PM, our team at TypeSafe AI stops for an emotional check-in during lunch. \
+Yes, it sounds weird, but it's an important part of our culture.
+
+Tech companies and startups are obsessed with hustle culture. Everyone repeats the same NPC mantras like "996" 🤖
+
+Underneath it all is an implicit assumption that you can either work incredibly hard or genuinely care about \
+your team. That you only get to pick one. At Typesafe, we think that's a false dichotomy ‼️
+
+It's why we run daily emotional check-ins. It's a few minutes where we get together over lunch and share how \
+we're feeling that day - a quick reminder that your team is there for you and that it's okay to not be 100% all \
+the time.
+
+We go around the room one person at a time, while everyone eats and listens. Everyone gets 30 seconds to share \
+what's on their mind. Some people share personal life stuff, others share what they're stoked about or stuck on \
+at work.
+
+It's certainly been harder to do this since our launch 🤣
+
+But for me, there's nothing more exciting than working with super-smart people who look out for each other and \
+genuinely care.
+
+And when super-smart, hardworking people feel cared for, great things become inevitable.
+
+If that sounds like you, we're hiring!"""
 BROWSER_POST = "Our browser agents kept failing on authentication and timeouts once real users logged in."
 
 
@@ -35,6 +59,14 @@ def test_screenpipe_post_stops_at_evidence_for_fathin():
     assert proposal.reason == "No evidence relates to this post."
     assert [(s.key, s.status) for s in steps][2:] == [
         ("evidence", "stopped"), ("drafting", "not_reached"), ("checks", "not_reached")]
+
+
+def test_team_culture_post_does_not_match_dev_velocity_evidence():
+    # A real post about daily emotional check-ins and hiring, on Rico's topics only through "launch".
+    # His RP-06 ("two people can build what used to take a 6-person engineering team") shares only
+    # "person", "people" and "team" with it, and was pasted back as the draft.
+    proposal, _ = run(post_from_text(TEAM_CULTURE), load_founder("rico"), HonestStub())
+    assert proposal.decision == "do_nothing" and proposal.reason == "No evidence relates to this post."
 
 
 def test_shared_generic_words_are_not_relevance():

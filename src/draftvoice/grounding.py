@@ -10,7 +10,7 @@ from draftvoice.validate import content_words
 GENERIC = content_words("""
 agent agents agentic built build building builder work working works time demo code source open
 product products team teams user users system systems data tool tools record records model models
-startup startups founder founders company people thing real today week year need needs using used
+startup startups founder founders company people person persons thing real today week year need needs using used
 """)
 # Share of a cited evidence item's words a sentence may reuse before it reads as a copy.
 COPY_SHARE = 0.6
