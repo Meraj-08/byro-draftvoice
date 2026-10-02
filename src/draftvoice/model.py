@@ -50,6 +50,15 @@ def parse_output(raw: str) -> list[Sentence]:
         raise ModelError(f"invalid model output: {exc.__class__.__name__}") from exc
 
 
+def declined(raw: str) -> bool:
+    """The model's way to say the evidence does not fit this post: {"sentences": []}."""
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return False
+    return isinstance(data, dict) and data.get("sentences") == [] and set(data) == {"sentences"}
+
+
 def _to_json(sentences: list[Sentence]) -> str:
     return json.dumps({"sentences": [s.model_dump() for s in sentences]})
 
@@ -59,7 +68,7 @@ def build_prompt(request: DraftRequest) -> str:
     evidence = "\n".join(f"- [{e.id}] {e.text}" for e in request.evidence)
     rules = "\n".join(f"- {r.text}" for r in request.rules) or "- none"
     examples = "\n".join(f"- {x}" for x in request.examples) or "- none"
-    return f"""You write one LinkedIn comment as {name}, replying to the post below.
+    return f"""Write a NEW comment in {name}'s voice that responds to the specific point of the LinkedIn post below.
 
 How {name} comments (match this length, case, and tone; do not copy these):
 {examples}
@@ -67,15 +76,15 @@ How {name} comments (match this length, case, and tone; do not copy these):
 Voice rules:
 {rules}
 
-Write a reply a busy founder would actually post:
-- React to what THIS post says. Make one point, from {name}'s own experience or view.
+- Reference something concrete from the post: what it built, showed, or argued.
+- Use the evidence only as facts you may rely on. Do not copy evidence wording; say it in new words.
 - Do not summarise the post, do not praise it generically, do not sound like a press release.
-- Do not paste the evidence. Use it only so that every fact you state is true.
 
 Facts: you may only state facts found in the evidence below. No numbers, names, companies,
-customers, or "we/our/I built" claims that are not in the evidence you cite. If the evidence does not
-support a useful point about this post, write a short, honest reaction instead.
+customers, or "we/our/I built" claims that are not in the evidence you cite.
 Every sentence must cite the evidence IDs it relies on.
+
+If the evidence doesn't relate to this post, return no draft: {{"sentences": []}}
 
 Evidence:
 {evidence}

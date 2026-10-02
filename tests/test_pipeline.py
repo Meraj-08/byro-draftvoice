@@ -28,7 +28,10 @@ def test_draft_carries_evidence_and_checks():
     proposal = propose(FIXTURES["p-onboarding"].post, ALEX, HonestStub())
     assert proposal.sentences and all(s.evidence_ids for s in proposal.sentences)
     assert {c.check for c in proposal.checks if c.blocking} >= {
-        "V1 evidence", "V2 numbers", "V3 names", "V4 first person", "V5 generic", "V6 repeats", "V7 format"}
+        "V1 evidence", "V2 numbers", "V3 names", "V4 first person", "V6 repeats", "V7 format"}
+    # The stub quotes its evidence: V5 stays in the list but is not counted as a pass.
+    v5 = next(c for c in proposal.checks if c.check == "V5 generic")
+    assert not v5.passed and not v5.blocking
     assert proposal.profile_version == ALEX.profile.version
 
 

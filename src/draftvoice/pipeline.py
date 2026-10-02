@@ -7,7 +7,8 @@ import json
 from dataclasses import dataclass
 
 from draftvoice.gate import MAX_EVIDENCE, GateResult, decide
-from draftvoice.model import Drafter, DraftRequest, ModelError
+from draftvoice.grounding import copy_check, relevant
+from draftvoice.model import Drafter, DraftRequest, ModelError, declined
 from draftvoice.models import Post, Proposal
 from draftvoice.store import Founder
 from draftvoice.validate import content_words, validate
@@ -87,13 +88,19 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
         reason = gate.reason if not gate.engage else "No approved evidence shares anything with this post."
         return stop("evidence", LABELS["evidence"], reason,
                     Proposal(**base, decision="do_nothing", reason=reason, reason_code="no_evidence"))
+    # The gate ranks by shared words but keeps its best even when that is only "agent".
+    evidence = relevant(post.text, gate.evidence)
+    if not evidence:
+        reason = "No evidence relates to this post."
+        return stop("evidence", LABELS["evidence"], reason,
+                    Proposal(**base, decision="do_nothing", reason=reason, reason_code="no_evidence"))
     steps.append(Step("evidence", LABELS["evidence"], "done",
-                      f"{len(gate.evidence)} approved item(s): {', '.join(e.id for e in gate.evidence)}"))
+                      f"{len(evidence)} approved item(s): {', '.join(e.id for e in evidence)}"))
 
     request = DraftRequest(
         post_text=post.text,
         founder_name=founder.profile.display_name,
-        evidence=gate.evidence,
+        evidence=evidence,
         rules=tuple(founder.profile.rules),
         examples=tuple(founder.profile.examples),
     )
@@ -103,11 +110,15 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
         reason = f"Model failed: {exc}"
         return stop("drafting", LABELS["drafting"], reason,
                     Proposal(**base, decision="do_nothing", reason=reason, reason_code="model_error"))
+    if declined(raw):
+        reason = "The model found no point in the evidence that responds to this post."
+        return stop("drafting", LABELS["drafting"], reason,
+                    Proposal(**base, decision="do_nothing", reason=reason, reason_code="no_evidence"))
     writer = ("the offline test writer, which pastes evidence; turn on Live model for a real draft"
               if drafter.name == "honest-stub" else drafter.name)
     steps.append(Step("drafting", LABELS["drafting"], "done", f"Drafted by {writer}"))
 
-    result = validate(raw, post.text, gate.evidence, founder.profile)
+    result = validate(raw, post.text, evidence, founder.profile)
     if not result.passed:
         names = ", ".join(c.check for c in result.failed)
         # The blocked draft is not kept: only the checks, so nothing unsupported can be copied.
@@ -120,15 +131,20 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
             checks=list(result.checks),
         ))
 
-    notes = len(result.warnings)
+    checks = copy_check(result.sentences, post.text, evidence, result.checks)
+    specific = all(c.passed for c in checks if c.check == "V5 generic")
+    notes = sum(1 for c in checks if not c.blocking and not c.passed and c.check.startswith("voice"))
+    summary = "V1–V7 passed" if specific else "V1–V4, V6–V7 passed; V5 not met: reuses your earlier wording"
+    if any(c.check == "copy" for c in checks) and specific:
+        summary += ", reuses your earlier wording"
     steps.append(Step("checks", LABELS["checks"], "done",
-                      "V1–V7 passed" + (f", {notes} voice note(s)" if notes else "")))
+                      summary + (f", {notes} voice note(s)" if notes else "")))
     return Proposal(
         **base,
         decision="draft",
         reason=gate.reason,
         sentences=list(result.sentences),
-        checks=list(result.checks),
+        checks=checks,
     ), steps
 
 

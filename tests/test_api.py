@@ -25,7 +25,10 @@ def test_propose_returns_draft_with_evidence_and_checks():
     status, p = post("/api/propose", {"founder": "rico", "text": LINKEDIN_POST, "drafter": "stub"})
     assert status == 200 and p["decision"] == "draft"
     assert p["evidence"] and all(e["source"] for e in p["evidence"])
-    assert {c["check"].split()[0] for c in p["checks"]} >= {"V1", "V2", "V3", "V4", "V5", "V6", "V7"}
+    assert {c["check"].split()[0] for c in p["checks"]} >= {"V1", "V2", "V3", "V4", "V6", "V7"}
+    # The stub pastes evidence, so V5 specificity is a note, not a pass.
+    notes = {c["check"]: c["detail"] for c in p["warnings"]}
+    assert "V5 generic" in notes and "Reuses your earlier wording" in notes["copy"]
 
 
 def test_same_post_differs_per_founder():
