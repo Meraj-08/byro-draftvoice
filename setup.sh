@@ -18,7 +18,7 @@ fi
 
 "$PYTHON" -m venv .venv
 .venv/bin/pip install --quiet --upgrade pip
-.venv/bin/pip install --quiet -e ".[dev]"
+.venv/bin/pip install --quiet -e ".[dev,gemini]"
 .venv/bin/pytest -q
 
 echo
