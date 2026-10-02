@@ -55,13 +55,14 @@ def test_threshold_sweep_leaves_the_code_threshold_unchanged():
 
 def test_report_layout():
     text = evaluation.render(REPORT)
-    assert "Directional, not statistical." in text
-    assert "95% range" in text and "## Known gaps" in text and "relative_claim" not in text and "## What this does not show" in text
-    assert "## Design checks" in text and "eval-details.md" in text
-    assert "social" not in text and "substantive" not in text
-    assert len(text.splitlines()) <= 80
-    details = evaluation.render_details(REPORT)
-    assert "## Unseen lies" in details and "## V6 threshold sweep" in details
+    main, collapsed = text.split("<details>")
+    assert "Directional, not statistical." in main
+    assert "95% range" in main and "## Known gaps" in main and "## What this does not show" in main
+    assert "## Design checks" in main and "relative_claim" not in main
+    assert "social" not in text and "substantive" not in text and "eval-details" not in text
+    assert len(main.splitlines()) <= 80
+    assert text.count("<details>") == 1 and "The lie" in collapsed
+    assert all(u[0] in collapsed for u in REPORT.unseen)
 
 
 def test_model_errors_are_reported_not_passed():
@@ -78,5 +79,5 @@ def test_model_errors_are_reported_not_passed():
 def test_cli_writes_the_report(tmp_path, capsys):
     out = tmp_path / "report.md"
     assert main(["eval", "--out", str(out)]) == 0
-    assert (tmp_path / "eval-details.md").exists()
+    assert not (tmp_path / "eval-details.md").exists()
     assert "Lies the checks had never seen (synthetic, written by Gemini)" in capsys.readouterr().out
