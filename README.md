@@ -2,7 +2,7 @@
 
 <p align="center">
   <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-3775a9">
-  <img alt="Tests" src="https://img.shields.io/badge/tests-180%20passing-brightgreen">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-187%20passing-brightgreen">
   <img alt="Drafts: Gemini or offline stub" src="https://img.shields.io/badge/drafts-Gemini%20%7C%20offline%20stub-6aa6f8">
   <a href="docs/eval-report.md"><img alt="Eval report" src="https://img.shields.io/badge/eval-report-orange"></a>
 </p>
@@ -22,7 +22,13 @@ Founder-controlled comment review for LinkedIn. Built for the Byro technical cha
 
 DraftVoice either drafts a comment, with the evidence behind each sentence and the result of every check, or says why it does nothing. The founder is `rico` or `fathin` (`alex` is synthetic test data).
 
-For live drafts, put `GEMINI_API_KEY` in `.env` (see `.env.example`). When a key is set, the browser panel and the API use Gemini by default. Without one, they use an offline stub.
+For live drafts, copy the example settings and add your Gemini key:
+
+```bash
+cp .env.example .env    # then set GEMINI_API_KEY in .env
+```
+
+When a key is set, the CLI, the browser panel, and the API use Gemini by default. Without one, they use an offline stub that quotes evidence on purpose to test the checks.
 
 ## Architecture
 
@@ -203,13 +209,19 @@ byro-draftvoice/
 
 ## Configuration
 
-`.env` in the repository root (real environment variables win):
+Settings live in `.env` in the repository root (start from `.env.example`). Real environment variables win over the file.
+
+```env
+GEMINI_API_KEY=                     # set it and live drafts use Gemini; leave empty for the offline stub
+# MODEL_MODE=gemini                 # optional override: force stub or gemini
+GEMINI_MODEL=gemini-3.5-flash-lite  # or any other Gemini model your key can use
+```
 
 | Variable | Purpose |
 | --- | --- |
-| `GEMINI_API_KEY` | Turns on live drafts; the panel and the API then use Gemini by default |
-| `MODEL_MODE` | `stub` or `gemini`; overrides that default |
-| `GEMINI_MODEL` | Defaults to `gemini-3.5-flash` |
+| `GEMINI_API_KEY` | Turns on live drafts. With a key, Gemini is the default everywhere |
+| `MODEL_MODE` | Optional: `stub` or `gemini`, to force one regardless of the key |
+| `GEMINI_MODEL` | Which Gemini model to use. If unset, `gemini-3.5-flash`. If a model is unavailable or overloaded, the panel says so; try another here |
 
 ## Results
 
@@ -235,10 +247,10 @@ The samples are small, so read these as directional. The report lists known gaps
 
 ## Status
 
-Proof in progress. Next: design-partner sessions, then a thin runnable proof that tests the riskiest assumption.
+The proof is built: gate, checks V1–V7, eval, learning from edits, local API, mock feed, and LinkedIn extension, with 187 tests. Not done yet: a design-partner session with the founders, and the next experiment (20 real posts with them, measuring light vs. heavy edits and overruled skips).
 
 ## Boundaries
 
-- No LinkedIn login, scraping, commenting, or posting. Input is synthetic fixtures or text the user confirmed, and output ends at a copy or mock handoff.
+- DraftVoice never logs in, scrapes, comments, or posts. On LinkedIn the extension reads only the one post you choose, after you click, with Fathin's written permission; everywhere else the input is synthetic fixtures or text you paste. Output ends at a copy or a mock handoff.
 - All test data is synthetic and labelled as such.
 - No API keys are committed. The default demo and the tests run without model credentials.
