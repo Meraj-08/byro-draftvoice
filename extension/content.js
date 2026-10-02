@@ -27,6 +27,7 @@
   let picking = false;
   let method = "auto";
   let highlighted = "";
+  let highlightedNode = null;
   let hint = null;
   let hintFor = null;
   let ticking = false;
@@ -97,7 +98,10 @@
       if (strict) fail("Highlight the post's text first, then click the tab.");
       return false;
     }
-    sendPost({ author: "", headline: "Highlighted text", text: highlighted }, null);
+    // The text is what the founder highlighted; the author comes from the post it was highlighted in.
+    const where = adapter.describe(highlightedNode);
+    sendPost({ author: where?.author || "", headline: where?.headline || "Highlighted text", text: highlighted },
+      where?.element || null);
     return true;
   }
 
@@ -197,7 +201,11 @@
   }
 
   // C: remember the highlighted text at the moment the founder presses the tab.
-  tab.addEventListener("mousedown", () => { highlighted = String(window.getSelection() || "").trim(); });
+  tab.addEventListener("mousedown", () => {
+    const selection = window.getSelection();
+    highlighted = String(selection || "").trim();
+    highlightedNode = selection && selection.anchorNode;
+  });
   tab.addEventListener("click", () => (root.classList.contains("draftvoice-open") ? close() : open()));
 
   // B: only while picking. Hover shows which post a click would choose; the click selects it and does nothing else.

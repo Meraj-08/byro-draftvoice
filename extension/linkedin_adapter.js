@@ -110,6 +110,29 @@
     return best;
   }
 
+  // The author's name. The first profile link is often the photo, which has no text, so try each link,
+  // then the "View <name>'s profile" label LinkedIn puts on them.
+  function authorOf(el) {
+    const named = firstLine(first(el, AUTHOR));
+    if (named) return named;
+    const links = [...el.querySelectorAll(AUTHOR_LINK)];
+    for (const a of links) {
+      const name = firstLine(a.innerText);
+      if (name && !/^(•|·|\d+(st|nd|rd|th)\b|follow)/i.test(name)) return name;
+    }
+    for (const a of links) {
+      const m = (a.getAttribute("aria-label") || "").match(/^view\s+(.+?)[’']s\b/i);
+      if (m) return m[1].trim();
+    }
+    return "";
+  }
+
+  // {author, headline} of the post that contains a node, e.g. highlighted text.
+  function describe(node) {
+    const el = node && postAt(node.nodeType === 1 ? node : node.parentElement);
+    return el ? { author: authorOf(el), headline: firstLine(first(el, HEADLINE)), element: el } : null;
+  }
+
   // {author, headline, text}, or null when no text can be found.
   // Text cut off by LinkedIn's "...see more" is read as shown; DraftVoice does not click anything.
   function readPost(el) {
@@ -117,10 +140,8 @@
     let text = first(el, TEXT) || longestText(el);
     text = text.replace(/(…|\.\.\.)\s*see more$/i, "").trim();
     if (text.length < 20) return null;
-    const link = el.querySelector(AUTHOR_LINK);
-    const author = firstLine(first(el, AUTHOR)) || firstLine(link?.innerText);
-    return { author, headline: firstLine(first(el, HEADLINE)), text };
+    return { author: authorOf(el), headline: firstLine(first(el, HEADLINE)), text };
   }
 
-  window.DraftVoiceLinkedIn = { posts, mostVisiblePost, postAt, isSinglePostPage, singlePagePost, readPost };
+  window.DraftVoiceLinkedIn = { posts, mostVisiblePost, postAt, isSinglePostPage, singlePagePost, readPost, describe };
 })();

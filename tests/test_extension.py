@@ -53,8 +53,9 @@ def test_nothing_runs_before_the_tab_is_clicked():
     assert "readPost" not in top_level and "mostVisiblePost" not in top_level and "getSelection" not in top_level
     assert re.search(r"function open\(\) \{[^}]*choose\(\);", CONTENT)
     # Highlighted text is read only when the tab is pressed.
-    assert re.findall(r".*getSelection.*", CONTENT) == [
-        '  tab.addEventListener("mousedown", () => { highlighted = String(window.getSelection() || "").trim(); });']
+    (line,) = re.findall(r".*getSelection.*", CONTENT)
+    handler = CONTENT[CONTENT.index('tab.addEventListener("mousedown"'):CONTENT.index('tab.addEventListener("click"')]
+    assert line.strip() in handler
     # Hover and click handlers do nothing unless the founder started picking.
     assert CONTENT.count("if (!picking") == 2
 
