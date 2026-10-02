@@ -78,9 +78,15 @@ def test_prompt_marks_post_as_data_and_sends_only_matched_evidence():
     assert "ev-002" not in prompt  # approved, but not matched to this post
 
 
-def test_default_mode_is_the_offline_stub():
+def test_without_a_key_the_default_is_the_offline_stub():
     assert isinstance(get_drafter({}), HonestStub)
     assert isinstance(get_drafter({"MODEL_MODE": ""}), HonestStub)
+
+
+def test_a_key_alone_makes_gemini_the_default():
+    assert isinstance(get_drafter({"GEMINI_API_KEY": "k"}), GeminiDrafter)
+    assert isinstance(get_drafter({"GEMINI_API_KEY": "k", "MODEL_MODE": ""}), GeminiDrafter)
+    assert isinstance(get_drafter({"GEMINI_API_KEY": "k", "MODEL_MODE": "stub"}), HonestStub)  # explicit override
 
 
 def test_gemini_mode_without_key_fails_closed():

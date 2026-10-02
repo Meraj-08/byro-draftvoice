@@ -163,6 +163,11 @@
       </div>
       <div class="skeleton"><div></div><div></div><div></div></div>`;
     $("actions").hidden = true;
+    if (state.post && !$("postText").classList.contains("clamp")) {
+      $("postText").classList.add("clamp");
+      $("more").textContent = "Show more";
+    }
+    $("result").scrollIntoView({ block: "nearest" });
     const started = Date.now();
     clearInterval(state.timer);
     state.timer = setInterval(() => {
@@ -349,7 +354,7 @@
       propose();
     } else if (m.type === "draftvoice:reading") {
       $("empty").hidden = true;
-      loading();
+      loading($("live").checked);
     } else if (m.type === "draftvoice:error") {
       showMessage(m.message || "Couldn't read this post. Try scrolling it into view.");
     } else if (m.type === "draftvoice:host" && m.methods) {
@@ -364,9 +369,9 @@
   async function loadFounders() {
     const data = await api("/api/founders");
     state.founders = data.founders;
-    // Use the live model when it is set up, unless the founder turned it off before.
-    const saved = store("draftvoice.live");
-    $("live").checked = saved === null ? !!data.live_available : saved === "1";
+    // Use the live model whenever it is set up. Turning it off is not remembered, so a stale
+    // "off" can never leave every draft to the offline stub.
+    $("live").checked = !!data.live_available;
     $("live").disabled = !data.live_available;
     $("live").parentElement.title = data.live_available ? "" : "Add GEMINI_API_KEY to .env to enable";
     const savedFounder = store("draftvoice.founder");
@@ -377,7 +382,6 @@
   // On LinkedIn the content script says so, and the founder can choose how the post is picked.
   $("method").addEventListener("change", () => tell({ type: "draftvoice:method", method: $("method").value }));
 
-  $("live").addEventListener("change", () => store("draftvoice.live", $("live").checked ? "1" : "0"));
 
   (async () => {
     try {

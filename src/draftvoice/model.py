@@ -205,7 +205,8 @@ def load_env(path: Path = ROOT / ".env") -> dict[str, str]:
 
 def get_drafter(env: dict[str, str] | None = None) -> Drafter:
     env = load_env() if env is None else env
-    mode = env.get("MODEL_MODE", "stub") or "stub"
+    # Live drafts come from the model: a key alone turns on Gemini. MODEL_MODE only overrides that.
+    mode = env.get("MODEL_MODE") or ("gemini" if env.get("GEMINI_API_KEY") else "stub")
     if mode == "stub":
         return HonestStub()
     if mode == "gemini":

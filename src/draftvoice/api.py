@@ -64,15 +64,13 @@ def proposal_view(proposal: Proposal, founder: Founder, steps=()) -> dict:
 
 
 def _drafter(name: str | None):
-    """Live drafts come from the model: with GEMINI_API_KEY set and nothing chosen, use Gemini.
-    The stub is for tests and runs without a key."""
+    """Live drafts come from the model: with GEMINI_API_KEY set and nothing chosen, use Gemini
+    (see get_drafter). The stub is for tests and runs without a key."""
     env = load_env()
     if name:
         if name not in DRAFTERS:
             raise ApiError(400, f"drafter must be one of {', '.join(DRAFTERS)}")
         env["MODEL_MODE"] = name
-    elif not env.get("MODEL_MODE"):
-        env["MODEL_MODE"] = "gemini" if env.get("GEMINI_API_KEY") else "stub"
     return get_drafter(env)
 
 
@@ -150,6 +148,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Origin", origin)
             self.send_header("Vary", "Origin")
         self.send_header("Content-Type", content_type)
+        self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
         self.wfile.write(payload)
