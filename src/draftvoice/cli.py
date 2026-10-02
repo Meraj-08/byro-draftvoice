@@ -41,6 +41,9 @@ def build_parser() -> argparse.ArgumentParser:
     ru.add_argument("target", nargs="?", help="a rule id for approve/reject")
     ru.add_argument("--founder", help="whose rules (needed for revert)")
 
+    sv = commands.add_parser("serve", help="run the local API and the mock feed at http://127.0.0.1:8765")
+    sv.add_argument("--port", type=int, default=8765)
+
     e = commands.add_parser("eval", help="run every check on the fixtures and write docs/eval-report.md")
     e.add_argument("--out", help="where to write the report (default docs/eval-report.md)")
     e.add_argument("--live", action="store_true", help="also judge live Gemini drafts (needs GEMINI_API_KEY)")
@@ -119,6 +122,21 @@ def cmd_propose(args) -> int:
     return 0
 
 
+def cmd_serve(args) -> int:
+    from draftvoice.api import serve
+
+    server = serve(args.port)
+    print(f"DraftVoice is running at http://127.0.0.1:{args.port}  (mock feed; Ctrl+C to stop)")
+    print("Only this machine can reach it. Nothing is ever posted.")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
+    finally:
+        server.server_close()
+    return 0
+
+
 def cmd_review(args) -> int:
     action = "accept" if args.accept else "edit" if args.edit else "reject" if args.reject else "skip"
     rv, suggestion = learning.review(args.proposal, action, args.edit)
@@ -169,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     try:
-        handler = {"eval": cmd_eval, "review": cmd_review, "rules": cmd_rules}.get(args.command, cmd_propose)
+        handler = {"eval": cmd_eval, "review": cmd_review, "rules": cmd_rules, "serve": cmd_serve}.get(args.command, cmd_propose)
         return handler(args)
     except (DataError, ModelError, learning.ReviewError) as exc:
         print(f"error: {exc}", file=sys.stderr)

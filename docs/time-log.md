@@ -9,4 +9,5 @@ Timebox: 10 hours of active work. Times in IST; breaks and waiting not counted.
 | Design v1 | ~11:00 | 0:20 |
 | Proof build: gate, checks, eval, learning (commits 1–8) | 14:30–18:30 | 3:15 |
 | Evidence collection + labelling | within 14:30–18:30 | 0:45 |
-| **Total so far** | | **~6:00** |
+| Demo layer: mock feed, right-click extension | 19:00– | in progress |
+| **Total so far** | | **~6:00** + demo layer |

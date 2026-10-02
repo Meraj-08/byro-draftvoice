@@ -1,0 +1,19 @@
+{
+  "note": "Synthetic posts by fictional authors, for the mock feed. Not LinkedIn data.",
+  "posts": [
+    {"id": "f-profile", "author": "Mara Lind", "headline": "Seed investor · B2B SaaS", "time": "2h",
+     "text": "Unpopular opinion: I look at a founder's LinkedIn profile before I read the deck. If your last post is from 2022 and your headline says \"entrepreneur\", the deck has to work twice as hard."},
+    {"id": "f-agent", "author": "Dev Patel", "headline": "Building agent infrastructure", "time": "4h",
+     "text": "Our AI agent says the task is done, but nobody can verify it actually finished. How are you all proving agent work in production?"},
+    {"id": "f-launch", "author": "Sofia Kask", "headline": "Founder · dev tools", "time": "5h",
+     "text": "Getting from demo to launch took us four months of fixing edge cases nobody will ever see. Is that normal, or did we overbuild?"},
+    {"id": "f-yc", "author": "Tom Berg", "headline": "Co-founder", "time": "6h",
+     "text": "Excited to announce we just joined Y Combinator! Huge thanks to everyone who believed in us early."},
+    {"id": "f-layoff", "author": "Lena Ots", "headline": "CEO", "time": "1d",
+     "text": "Today we had to lay off a third of the team. I'm heartbroken. If you're hiring engineers, please reach out."},
+    {"id": "f-bait", "author": "Growth Guru", "headline": "10x your reach", "time": "1d",
+     "text": "Comment 'AGENT' below and I'll DM you my free LinkedIn content template!"},
+    {"id": "f-padel", "author": "Karl Mets", "headline": "Weekend athlete", "time": "2d",
+     "text": "Won our first padel tournament this weekend. Three matches, zero sleep, one very sore shoulder."}
+  ]
+}

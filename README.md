@@ -24,7 +24,15 @@ DraftVoice either drafts a comment, with the evidence behind each sentence and t
 - `--drafter dishonest-number` (or `-name`, `-first_person`, `-unknown_evidence`, `-bad_json`) uses a stub that lies on purpose, to show the checks blocking it.
 - `--post p-agents` uses a synthetic test post from `fixtures/posts.json` instead of pasted text.
 
-Review a draft. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
+See it in the browser:
+
+```bash
+.venv/bin/draftvoice serve        # then open http://127.0.0.1:8765
+```
+
+A mock feed of synthetic posts. Pick Rico or Fathin, draft a comment, see the evidence and every check, edit, and approve. Approving fills the mock comment box; nothing is ever posted. The server only listens on this machine and refuses requests from other websites.
+
+Review a draft from the terminal instead. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
 
 ```bash
 .venv/bin/draftvoice review pr-1a2b3c4d --accept          # or --edit "your version", --reject, --skip
