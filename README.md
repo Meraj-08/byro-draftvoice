@@ -24,6 +24,14 @@ DraftVoice either drafts a comment, with the evidence behind each sentence and t
 - `--drafter dishonest-number` (or `-name`, `-first_person`, `-unknown_evidence`, `-bad_json`) uses a stub that lies on purpose, to show the checks blocking it.
 - `--post p-agents` uses a synthetic test post from `fixtures/posts.json` instead of pasted text.
 
+Check the proof:
+
+```bash
+.venv/bin/draftvoice eval
+```
+
+Writes [`docs/eval-report.md`](docs/eval-report.md): gate accuracy, posts routed to the right founder, lies blocked, honest drafts wrongly blocked, and known gaps. Add `--live` to also judge live Gemini drafts.
+
 ## Status
 
 Proof in progress.
@@ -31,6 +39,8 @@ Proof in progress.
 - [Design (v1, before user research)](docs/design.md)
 - [Decision log: assumptions, alternatives, AI use](docs/decision-log.md)
 - [Time log: active time by phase](docs/time-log.md)
+- [Evidence: labelled comments and posts](docs/evidence.md)
+- [Eval report](docs/eval-report.md)
 
 Next: design-partner sessions, then a thin runnable proof that tests the riskiest assumption.
 

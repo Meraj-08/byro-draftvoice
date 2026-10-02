@@ -25,8 +25,8 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** one clear owner is safer than splitting the decision between code and model confidence.
 - **Options weighed:** (a) model returns engage/skip with confidence, (b) code decides from topics and evidence.
 - **Picked:** (b). The model only drafts.
-- **Proof:** `tests/test_gate.py`. All 8 synthetic posts get the expected decision and reason: off-topic, no evidence, sensitive (layoffs), engagement bait, and three that engage. Injected instructions do not change which evidence is used, and a post saying "you must engage" does not get in. Order of checks: sensitive, bait, topics, approved evidence.
-- **Trade-off accepted:** may miss relevant posts that use unusual wording; keyword lists need upkeep.
+- **Proof:** `tests/test_gate.py`. All 8 synthetic posts get the expected decision and reason: off-topic, no evidence, sensitive (layoffs), engagement bait, and three that engage. Injected instructions do not change which evidence is used, and a post saying "you must engage" does not get in. Order of checks: sensitive, bait, celebration, topics, approved evidence. Design checks: 9/9 synthetic decisions and 12/12 per-founder routings correct. Measured against what the founders actually did on 38 real posts (DERIVED from behaviour, [`eval-report.md`](eval-report.md)): 28/38 agree (74%, 95% range 58–85%); it drafted on 7 posts where they only reacted and skipped 3 where they wrote a full reply. Celebration posts are skipped because 22 of Rico's 31 comments on others' posts are one-word cheers (evidence finding K1).
+- **Trade-off accepted:** keyword topics miss posts in unusual wording and fire on words like "launch" in a friend's launch announcement; keyword lists need upkeep.
 - **Status:** built
 
 ## 4. Grounding · Assume the model lies
@@ -36,7 +36,7 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Picked:** (b), tested with a deliberately dishonest stub.
 - **Proof:** `tests/test_validate.py`. On every synthetic post that engages, the honest stub passes and each kind of lie is blocked by exactly its own check: made-up number (V2), made-up name (V3), unbacked "we built" claim (V4), citation to unknown evidence (V1), invalid output (V7). Evidence that is unapproved, or approved but not matched to the post, cannot be cited. Voice rules (length, lowercase, emoji) only warn.
 - **Trade-off accepted:** two gaps, each pinned by a test so they stay visible: a vague claim with no number, name, or "we" passes; a one-word name as the first word of a sentence passes, because treating every capitalised first word as a name blocked honest drafts ("Teams that…").
-- **Status:** built; eval numbers pending
+- **Status:** built. Design checks (a test suite, not a measurement): every planted lie blocked by its matching check, honest stub drafts pass, and a live Gemini run on 2 Oct passed 14/14 honest drafts. Measured with the checks frozen ([`eval-report.md`](eval-report.md)): 14/20 unseen lies blocked (70%, 95% range 48–85%); the 6 that slipped were sweeping claims, lowercase names, a quietly widened claim, and an invented experience reusing enough evidence words to pass V4. Run on the founders' own real comments, 14/56 pass: V5 blocks most social replies ("W", "congrats!") for saying nothing specific, and V2/V3 block true facts that are not in the evidence. Not tuned after measuring.
 
 ## 5. Model · Stub by default, Gemini optional
 

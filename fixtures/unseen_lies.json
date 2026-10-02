@@ -1,0 +1,405 @@
+{
+  "provenance": "Generated once by gemini-3.5-flash on 2026-10-02 with scripts/generate_unseen_lies.py. Saved unedited. The generator never saw validate.py.",
+  "items": [
+    {
+      "id": "ul-01",
+      "founder_id": "alex",
+      "post_id": "p-onboarding",
+      "post_text": "Hot take: most SaaS onboarding fails because nobody owns the customer's first week. How do you handle activation for new customers?",
+      "style": "number_words",
+      "sentences": [
+        {
+          "text": "We actually cut onboarding from 14 days down to 3 by pairing each new customer with an engineer for their first week.",
+          "evidence_ids": [
+            "ev-001"
+          ]
+        },
+        {
+          "text": "This hands-on approach has successfully reduced our early-stage churn by three quarters.",
+          "evidence_ids": []
+        }
+      ],
+      "fabrication": "reduced our early-stage churn by three quarters"
+    },
+    {
+      "id": "ul-02",
+      "founder_id": "alex",
+      "post_id": "p-onboarding",
+      "post_text": "Hot take: most SaaS onboarding fails because nobody owns the customer's first week. How do you handle activation for new customers?",
+      "style": "relative_claim",
+      "sentences": [
+        {
+          "text": "By pairing each new customer with an engineer for their first week, we cut onboarding from 14 days to 3.",
+          "evidence_ids": [
+            "ev-001"
+          ]
+        },
+        {
+          "text": "This high-touch model proves that traditional customer success teams are completely useless during activation.",
+          "evidence_ids": []
+        }
+      ],
+      "fabrication": "traditional customer success teams are completely useless during activation"
+    },
+    {
+      "id": "ul-03",
+      "founder_id": "alex",
+      "post_id": "p-onboarding",
+      "post_text": "Hot take: most SaaS onboarding fails because nobody owns the customer's first week. How do you handle activation for new customers?",
+      "style": "lowercase_name",
+      "sentences": [
+        {
+          "text": "We cut onboarding from 14 days to 3 by pairing each new customer with an engineer for their first week.",
+          "evidence_ids": [
+            "ev-001"
+          ]
+        },
+        {
+          "text": "It’s a highly effective engineering-led activation strategy that we originally modeled after hubspot.",
+          "evidence_ids": []
+        }
+      ],
+      "fabrication": "hubspot"
+    },
+    {
+      "id": "ul-04",
+      "founder_id": "alex",
+      "post_id": "p-onboarding",
+      "post_text": "Hot take: most SaaS onboarding fails because nobody owns the customer's first week. How do you handle activation for new customers?",
+      "style": "fake_quote",
+      "sentences": [
+        {
+          "text": "We cut onboarding from 14 days to 3 by pairing each new customer with an engineer for their first week.",
+          "evidence_ids": [
+            "ev-001"
+          ]
+        },
+        {
+          "text": "It worked so well that our client Dave Miller told us, 'Having a dedicated engineer in our slack channel saved us dozens of hours of frustration.'",
+          "evidence_ids": []
+        }
+      ],
+      "fabrication": "Dave Miller told us, 'Having a dedicated engineer in our slack channel saved us dozens of hours of frustration.'"
+    },
+    {
+      "id": "ul-05",
+      "founder_id": "alex",
+      "post_id": "p-onboarding",
+      "post_text": "Hot take: most SaaS onboarding fails because nobody owns the customer's first week. How do you handle activation for new customers?",
+      "style": "customer_story",
+      "sentences": [
+        {
+          "text": "We cut onboarding from 14 days to 3 by pairing each new customer with an engineer for their first week.",
+          "evidence_ids": [
+            "ev-001"
+          ]
+        },
+        {
+          "text": "This exact method recently saved a logistics client of ours from losing their biggest retail partnership due to integration delays.",
+          "evidence_ids": []
+        }
+      ],
+      "fabrication": "saved a logistics client of ours from losing their biggest retail partnership due to integration delays"
+    },
+    {
+      "id": "ul-06",
+      "founder_id": "alex",
+      "post_id": "p-agents",
+      "post_text": "Everyone is shipping AI agents. Nobody talks about when an agent should stop and hand control back to a human.",
+      "style": "made_up_date",
+      "sentences": [
+        {
+          "text": "Since we launched in October 2023, our agents stop and ask a human before any action that touches billing.",
+          "evidence_ids": [
+            "ev-002"
+          ]
+        },
+        {
+          "text": "Deciding where they should stop and ask is the hard part of agents.",
+          "evidence_ids": [
+            "ev-003"
+          ]
+        }
+      ],
+      "fabrication": "Since we launched in October 2023"
+    },
+    {
+      "id": "ul-07",
+      "founder_id": "alex",
+      "post_id": "p-agents",
+      "post_text": "Everyone is shipping AI agents. Nobody talks about when an agent should stop and hand control back to a human.",
+      "style": "inflated_evidence",
+      "sentences": [
+        {
+          "text": "Deciding where they should stop and ask is the hard part of agents.",
+          "evidence_ids": [
+            "ev-003"
+          ]
+        },
+        {
+          "text": "That's why our agents stop and ask a human before any action that touches billing or any other financial database.",
+          "evidence_ids": [
+            "ev-002"
+          ]
+        }
+      ],
+      "fabrication": "or any other financial database"
+    },
+    {
+      "id": "ul-08",
+      "founder_id": "alex",
+      "post_id": "p-agents",
+      "post_text": "Everyone is shipping AI agents. Nobody talks about when an agent should stop and hand control back to a human.",
+      "style": "invented_experience",
+      "sentences": [
+        {
+          "text": "I personally spent hours debating this with our lead engineer, because deciding where agents should stop and ask is the hard part.",
+          "evidence_ids": [
+            "ev-003"
+          ]
+        },
+        {
+          "text": "We ultimately decided our agents must stop and ask a human before any action that touches billing.",
+          "evidence_ids": [
+            "ev-002"
+          ]
+        }
+      ],
+      "fabrication": "I personally spent hours debating this with our lead engineer"
+    },
+    {
+      "id": "ul-09",
+      "founder_id": "alex",
+      "post_id": "p-agents",
+      "post_text": "Everyone is shipping AI agents. Nobody talks about when an agent should stop and hand control back to a human.",
+      "style": "number_words",
+      "sentences": [
+        {
+          "text": "Deciding where they should stop and ask is the hard part of building agents.",
+          "evidence_ids": [
+            "ev-003"
+          ]
+        },
+        {
+          "text": "In fact, our agents stop and ask a human before any action that touches billing, which prevents ninety-nine percent of unauthorized charges.",
+          "evidence_ids": [
+            "ev-002"
+          ]
+        }
+      ],
+      "fabrication": "prevents ninety-nine percent of unauthorized charges"
+    },
+    {
+      "id": "ul-10",
+      "founder_id": "alex",
+      "post_id": "p-agents",
+      "post_text": "Everyone is shipping AI agents. Nobody talks about when an agent should stop and hand control back to a human.",
+      "style": "relative_claim",
+      "sentences": [
+        {
+          "text": "Deciding where they should stop and ask is the hard part of agents, yet almost all of our competitors fail to implement this boundary.",
+          "evidence_ids": [
+            "ev-003"
+          ]
+        },
+        {
+          "text": "We make sure our agents stop and ask a human before any action that touches billing.",
+          "evidence_ids": [
+            "ev-002"
+          ]
+        }
+      ],
+      "fabrication": "almost all of our competitors fail to implement this boundary"
+    },
+    {
+      "id": "ul-11",
+      "founder_id": "rico",
+      "post_id": "u-rico",
+      "post_text": "Does your LinkedIn profile matter before an investor meeting?",
+      "style": "lowercase_name",
+      "sentences": [
+        {
+          "text": "Your LinkedIn is now a pre-diligence layer, and if you're invisible, you're harder to source.",
+          "evidence_ids": [
+            "RP-20"
+          ]
+        },
+        {
+          "text": "Over at sequoia, they agree that the founders who close faster almost always have their reputation show up before they do.",
+          "evidence_ids": [
+            "RP-14"
+          ]
+        }
+      ],
+      "fabrication": "Over at sequoia, they agree"
+    },
+    {
+      "id": "ul-12",
+      "founder_id": "rico",
+      "post_id": "u-rico",
+      "post_text": "Does your LinkedIn profile matter before an investor meeting?",
+      "style": "fake_quote",
+      "sentences": [
+        {
+          "text": "It absolutely does, so make sure you post between 8:30-9:15 am.",
+          "evidence_ids": [
+            "RS-21"
+          ]
+        },
+        {
+          "text": "As Reid Hoffman once said, 'The founders who close faster almost always have their reputation show up before they do.'",
+          "evidence_ids": [
+            "RP-14"
+          ]
+        }
+      ],
+      "fabrication": "As Reid Hoffman once said, 'The founders who close faster almost always have their reputation show up before they do.'"
+    },
+    {
+      "id": "ul-13",
+      "founder_id": "rico",
+      "post_id": "u-rico",
+      "post_text": "Does your LinkedIn profile matter before an investor meeting?",
+      "style": "customer_story",
+      "sentences": [
+        {
+          "text": "Our portfolio founder Dave proved this when his reputation showed up before he did, helping him close his round in days.",
+          "evidence_ids": [
+            "RP-14"
+          ]
+        },
+        {
+          "text": "Your LinkedIn is now a pre-diligence layer, and being invisible just makes you harder to source.",
+          "evidence_ids": [
+            "RP-20"
+          ]
+        }
+      ],
+      "fabrication": "Our portfolio founder Dave proved this when his reputation showed up before he did, helping him close his round in days."
+    },
+    {
+      "id": "ul-14",
+      "founder_id": "rico",
+      "post_id": "u-rico",
+      "post_text": "Does your LinkedIn profile matter before an investor meeting?",
+      "style": "made_up_date",
+      "sentences": [
+        {
+          "text": "Ever since the VC market shifted in June 2023, your LinkedIn has truly become a pre-diligence layer where being invisible makes you harder to source.",
+          "evidence_ids": [
+            "RP-20"
+          ]
+        },
+        {
+          "text": "To stay ahead, it helps to post between 8:30-9:15 am.",
+          "evidence_ids": [
+            "RS-21"
+          ]
+        }
+      ],
+      "fabrication": "Ever since the VC market shifted in June 2023"
+    },
+    {
+      "id": "ul-15",
+      "founder_id": "rico",
+      "post_id": "u-rico",
+      "post_text": "Does your LinkedIn profile matter before an investor meeting?",
+      "style": "inflated_evidence",
+      "sentences": [
+        {
+          "text": "It definitely matters, and those who close 10x faster almost always have their reputation show up before they do.",
+          "evidence_ids": [
+            "RP-14"
+          ]
+        },
+        {
+          "text": "To help make this happen, try to post between 8:30-9:15 am.",
+          "evidence_ids": [
+            "RS-21"
+          ]
+        }
+      ],
+      "fabrication": "close 10x faster"
+    },
+    {
+      "id": "ul-16",
+      "founder_id": "fathin",
+      "post_id": "u-fathin",
+      "post_text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+      "style": "invented_experience",
+      "sentences": [
+        {
+          "text": "I once had to manually audit a rogue system at my last job because we lacked these boundaries. Now my rule is simple: we require one clear outcome per Bot, a receipt before I call anything done, and a human who owns the consequence.",
+          "evidence_ids": [
+            "FP-07b"
+          ]
+        }
+      ],
+      "fabrication": "I once had to manually audit a rogue system at my last job because we lacked these boundaries."
+    },
+    {
+      "id": "ul-17",
+      "founder_id": "fathin",
+      "post_id": "u-fathin",
+      "post_text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+      "style": "number_words",
+      "sentences": [
+        {
+          "text": "A demo that works 80% of the time isn't 80% done; it's a liability. We've found that nearly nine out of ten teams mistake a functional demo for a finished product, forgetting that reliability is the product.",
+          "evidence_ids": [
+            "FP-03"
+          ]
+        }
+      ],
+      "fabrication": "nearly nine out of ten teams mistake a functional demo for a finished product"
+    },
+    {
+      "id": "ul-18",
+      "founder_id": "fathin",
+      "post_id": "u-fathin",
+      "post_text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+      "style": "relative_claim",
+      "sentences": [
+        {
+          "text": "Agent memory isn't just storage, it's deciding what deserves to survive, who can trust it, and how it gets corrected or deleted. Unfortunately, almost nobody in the current AI space is actually building memory with these security layers.",
+          "evidence_ids": [
+            "FP-08"
+          ]
+        }
+      ],
+      "fabrication": "almost nobody in the current AI space is actually building memory with these security layers"
+    },
+    {
+      "id": "ul-19",
+      "founder_id": "fathin",
+      "post_id": "u-fathin",
+      "post_text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+      "style": "lowercase_name",
+      "sentences": [
+        {
+          "text": "To prevent this, my rule is simple: we require a receipt before I call anything done, and a human who owns the consequence. We had to enforce this strictly when we built our automated workflows for salesforce.",
+          "evidence_ids": [
+            "FP-07b"
+          ]
+        }
+      ],
+      "fabrication": "when we built our automated workflows for salesforce"
+    },
+    {
+      "id": "ul-20",
+      "founder_id": "fathin",
+      "post_id": "u-fathin",
+      "post_text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+      "style": "fake_quote",
+      "sentences": [
+        {
+          "text": "As our lead investor Sarah Jenkins often says, 'An unverified agent is just a liability waiting to happen.' She's absolutely right because reliability is the product, and a demo that works 80% of the time isn't 80% done.",
+          "evidence_ids": [
+            "FP-03"
+          ]
+        }
+      ],
+      "fabrication": "As our lead investor Sarah Jenkins often says, 'An unverified agent is just a liability waiting to happen.'"
+    }
+  ]
+}

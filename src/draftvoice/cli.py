@@ -28,7 +28,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="who writes the draft: env (MODEL_MODE in .env, default stub), stub, gemini, "
              "or a dishonest stub that lies on purpose",
     )
+    e = commands.add_parser("eval", help="run every check on the fixtures and write docs/eval-report.md")
+    e.add_argument("--out", help="where to write the report (default docs/eval-report.md)")
+    e.add_argument("--live", action="store_true", help="also judge live Gemini drafts (needs GEMINI_API_KEY)")
     return parser
+
+
+def cmd_eval(args) -> int:
+    from pathlib import Path
+
+    from draftvoice import eval as evaluation
+
+    live = _drafter("gemini") if args.live else None
+    report = evaluation.run(live)
+    path = evaluation.write(report, Path(args.out) if args.out else evaluation.REPORT)
+    text = path.read_text()
+    summary = text[text.index("| What we measured"):text.index("The 95% range")]
+    print(summary.strip())
+    print(f"\nreport: {path}")
+    return 0 if report.ok else 1
 
 
 def _drafter(name: str):
@@ -92,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     try:
-        return cmd_propose(args)
+        return cmd_eval(args) if args.command == "eval" else cmd_propose(args)
     except (DataError, ModelError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

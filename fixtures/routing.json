@@ -1,0 +1,14 @@
+[
+  {"id": "r-linkedin", "text": "Does your LinkedIn profile matter before an investor meeting?",
+   "expected": {"rico": "draft", "fathin": "off_topic"}},
+  {"id": "r-agent-proof", "text": "Our AI agent says the task is done, but nobody can verify it actually finished.",
+   "expected": {"rico": "off_topic", "fathin": "draft"}},
+  {"id": "r-launch", "text": "Getting from demo to launch took us four months of fixing edge cases.",
+   "expected": {"rico": "draft", "fathin": "off_topic"}},
+  {"id": "r-celebration", "text": "Excited to announce we just joined Y Combinator!",
+   "expected": {"rico": "celebration", "fathin": "celebration"}},
+  {"id": "r-sensitive", "text": "We had to lay off half the team this week. AI agents could not save us.",
+   "expected": {"rico": "sensitive", "fathin": "sensitive"}},
+  {"id": "r-bait", "text": "Comment 'AGENT' below and I'll DM you my free LinkedIn content template!",
+   "expected": {"rico": "off_topic", "fathin": "off_topic"}}
+]
