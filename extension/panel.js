@@ -143,13 +143,38 @@
     setSteps(open, $("stepsSum").textContent);
   });
 
-  function loading() {
+  // While the API works: an honest wait, not fake progress. Only the elapsed time moves.
+  function loading(live) {
     $("stepsCard").hidden = false;
     setSteps(true, "");
     $("steps").innerHTML = stepRow({ label: "Reading the post" }, "running");
     $("result").hidden = false;
-    $("result").innerHTML = '<div class="skeleton"><div></div><div></div><div></div></div>';
+    $("result").classList.remove("is-draft");
+    $("result").innerHTML = `
+      <div class="thinking" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <div>
+          <div class="thinking-title">${live ? "Drafting with AI…" : "Checking the post…"}</div>
+          <div class="thinking-sub" id="thinkingSub">${live
+            ? "If the post qualifies, Gemini writes a reply and every claim is checked. This can take 10–20 seconds."
+            : "Offline test writer: this takes a moment."}</div>
+          <div class="thinking-time" id="thinkingTime">0s</div>
+        </div>
+      </div>
+      <div class="skeleton"><div></div><div></div><div></div></div>`;
     $("actions").hidden = true;
+    const started = Date.now();
+    clearInterval(state.timer);
+    state.timer = setInterval(() => {
+      const secs = Math.round((Date.now() - started) / 1000);
+      const time = $("thinkingTime");
+      if (!time) return clearInterval(state.timer);
+      time.textContent = `${secs}s`;
+      if (live && secs === 25) {
+        $("thinkingSub").textContent = "Taking longer than usual; Gemini may be busy. "
+          + "If the call fails, DraftVoice stops and says so.";
+      }
+    }, 1000);
   }
 
   async function propose(override = false) {
@@ -159,20 +184,23 @@
     state.editing = false;
     state.edited = null;
     state.reviewed = false;
-    loading();
+    const live = $("live").checked;
+    loading(live);
     let p;
     try {
       p = await api("/api/propose", {
         founder: state.founder, text: state.post.text, author: state.post.author,
-        headline: state.post.headline, drafter: $("live").checked ? "gemini" : "stub", override,
+        headline: state.post.headline, drafter: live ? "gemini" : "stub", override,
       });
     } catch (err) {
       if (run !== state.run) return;
+      clearInterval(state.timer);
       $("stepsCard").hidden = true;
       $("result").innerHTML = `<div class="reason">Could not reach DraftVoice. Is it running? (${esc(err.message)})</div>`;
       return;
     }
     if (run !== state.run) return; // a newer run started; drop this one
+    clearInterval(state.timer);
     // Play back the real steps, one at a time.
     const rows = [];
     for (const step of p.steps) {
