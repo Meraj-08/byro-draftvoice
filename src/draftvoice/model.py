@@ -15,7 +15,7 @@ from draftvoice.models import Evidence, Rule, Sentence
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_SENTENCES = 3
-DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
 ENV_KEYS = ("MODEL_MODE", "GEMINI_API_KEY", "GEMINI_MODEL")
 
 

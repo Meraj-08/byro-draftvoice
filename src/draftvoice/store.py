@@ -58,6 +58,16 @@ def load_founder(founder_id: str, founders_dir: Path = DATA_DIR) -> Founder:
     return Founder(profile, tuple(item for item in evidence if item.approved))
 
 
+def find_founder(founder_id: str) -> Founder:
+    """Real founders first, then the synthetic test founders."""
+    if founder_id in list_founders(DATA_DIR):
+        return load_founder(founder_id, DATA_DIR)
+    if founder_id in list_founders(FIXTURES_DIR / "founders"):
+        return load_founder(founder_id, FIXTURES_DIR / "founders")
+    known = ", ".join(list_founders(DATA_DIR) + list_founders(FIXTURES_DIR / "founders"))
+    raise DataError(f"unknown founder '{founder_id}' (known: {known})")
+
+
 def list_founders(founders_dir: Path = DATA_DIR) -> list[str]:
     if not founders_dir.is_dir():
         return []

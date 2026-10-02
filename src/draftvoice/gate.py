@@ -1,6 +1,6 @@
 """The engage decision. Code owns it: the model never decides whether to comment.
 
-Order: sensitive -> engagement bait -> founder topics -> approved evidence.
+Order: sensitive -> engagement bait -> celebration -> founder topics -> approved evidence.
 Post text is only ever matched against fixed lists; nothing in it is followed.
 """
 
@@ -22,6 +22,19 @@ BAIT = [
     r"\blike (and|&) (share|repost)\b",
     r"\bdrop an? \w+ (below|in the comments)\b",
     r"\bfree (template|guide|ebook)\b",
+]
+# Milestones and wins. The founders answer these with "W" or "congrats!" (evidence finding K1),
+# which needs no draft.
+CELEBRATION = [
+    r"\b(excited|thrilled|proud|happy|delighted) to (announce|share)\b",
+    r"\bpersonal news\b",
+    r"\b(we|i) (just )?(raised|closed)\b",
+    r"\b(joined|joining) (y combinator|yc)\b",
+    r"\b(got |been )?accepted (into|to)\b",
+    r"\b(we|i) (just )?won\b",
+    r"\bcongrat(s|ulations)\b",
+    r"\b(starting|started) a new (role|position|job)\b",
+    r"\bgraduated\b",
 ]
 MAX_EVIDENCE = 3
 
@@ -58,6 +71,11 @@ def decide(post: Post, founder: Founder) -> GateResult:
 
     if any(re.search(pattern, text) for pattern in BAIT):
         return GateResult(False, "Engagement bait; there is nothing to add.", "off_topic")
+
+    if any(re.search(pattern, text) for pattern in CELEBRATION):
+        return GateResult(
+            False, "A milestone post. A quick cheer is better written by the founder.", "celebration"
+        )
 
     topics = tuple(
         topic

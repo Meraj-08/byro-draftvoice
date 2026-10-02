@@ -43,9 +43,9 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** reviewers must be able to run everything without a key.
 - **Options weighed:** Gemini, Groq, local Ollama, stub only, several models combined.
 - **Picked:** deterministic stub by default; Gemini for live drafts; others can be added behind the same adapter.
-- **Proof:** `tests/test_model.py` runs with no key and no network. The dishonest stub adds one made-up number, name, "we built" claim, unknown evidence ID, or non-JSON reply per run. Live check on 2 Oct: the key authenticated; a retired model (404) and repeated "high demand" errors (503) all became do nothing instead of a crash.
+- **Proof:** `tests/test_model.py` runs with no key and no network. The dishonest stub adds one made-up number, name, "we built" claim, unknown evidence ID, or non-JSON reply per run. Live check on 2 Oct: the key authenticated; a retired model (404) and repeated "high demand" errors (503) all became do nothing instead of a crash. The default is `gemini-3.5-flash`, the newest model that answered reliably that day. Its first live drafts passed every check and matched each founder's real pattern: for Rico "if you're invisible you're harder to source fr 😎" (8 words, from RP-20); for Fathin "Agreed, but… The harder problem is… How are you solving…? 🙂‍↕️" (from FP-02).
 - **Trade-off accepted:** stub drafts are fixed text and say nothing about real voice quality; live drafts depend on Gemini being available.
-- **Status:** built (adapter); live drafts not yet reviewed
+- **Status:** built
 
 ## 6. Learning · Suggested rules, founder approves
 

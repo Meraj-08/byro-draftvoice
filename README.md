@@ -12,6 +12,18 @@ Founder-controlled comment review for LinkedIn. Byro technical challenge: help a
 
 Needs Python 3.11+. Creates `.venv`, installs DraftVoice, and runs the tests. No API key or network access to a model is needed.
 
+Try one post (paste any post text; the founder is `rico` or `fathin`):
+
+```bash
+.venv/bin/draftvoice propose --founder rico --text "Does your LinkedIn profile matter before an investor meeting?"
+```
+
+DraftVoice either drafts a comment, with the evidence behind each sentence and the result of every check, or says why it does nothing. It never posts.
+
+- `--drafter stub` (default) runs offline. `--drafter gemini` writes a live draft; put `GEMINI_API_KEY` in `.env` (see `.env.example`).
+- `--drafter dishonest-number` (or `-name`, `-first_person`, `-unknown_evidence`, `-bad_json`) uses a stub that lies on purpose, to show the checks blocking it.
+- `--post p-agents` uses a synthetic test post from `fixtures/posts.json` instead of pasted text.
+
 ## Status
 
 Proof in progress.

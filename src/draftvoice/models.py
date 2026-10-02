@@ -11,7 +11,7 @@ Label = Literal["observed", "synthetic", "user-confirmed"]
 Use = Literal["voice", "claim", "both"]
 Decision = Literal["draft", "do_nothing"]
 ReasonCode = Literal[
-    "off_topic", "sensitive", "no_evidence", "model_error", "check_failed"
+    "off_topic", "sensitive", "celebration", "no_evidence", "model_error", "check_failed"
 ]
 
 
