@@ -38,11 +38,11 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Trade-off accepted:** two gaps, each pinned by a test so they stay visible: a vague claim with no number, name, or "we" passes; a one-word name as the first word of a sentence passes, because treating every capitalised first word as a name blocked honest drafts ("Teams that…").
 - **Status:** built. Design checks (a test suite, not a measurement): every planted lie blocked by its matching check, honest stub drafts pass, and a live Gemini run on 2 Oct passed 14/14 honest drafts. Measured with the checks frozen ([`eval-report.md`](eval-report.md)): 14/20 unseen lies blocked (70%, 95% range 48–85%); the 6 that slipped were sweeping claims, lowercase names, a quietly widened claim, and an invented experience reusing enough evidence words to pass V4. Run on the founders' own real comments, 14/56 pass: V5 blocks most social replies ("W", "congrats!") for saying nothing specific, and V2/V3 block true facts that are not in the evidence. Not tuned after measuring.
 
-## 5. Model · Stub by default, Gemini optional
+## 5. Model · Stub for tests, Gemini for real drafts
 
 - **Belief:** reviewers must be able to run everything without a key.
 - **Options weighed:** Gemini, Groq, local Ollama, stub only, several models combined.
-- **Picked:** deterministic stub by default; Gemini for live drafts; others can be added behind the same adapter.
+- **Picked:** a deterministic stub for tests and for anyone without a key; Gemini for real drafts, on by default in the browser when a key is set; others can be added behind the same adapter. Milestone reactions use no model at all (entry 3).
 - **Proof:** `tests/test_model.py` runs with no key and no network. The dishonest stub adds one made-up number, name, "we built" claim, unknown evidence ID, or non-JSON reply per run. Live check on 2 Oct: the key authenticated; a retired model (404) and repeated "high demand" errors (503) all became do nothing instead of a crash. The default is `gemini-3.5-flash`, the newest model that answered reliably that day. The live model is on by default whenever a key is set; the offline stub, which only pastes evidence to test the checks, says so in its step. The prompt asks for a reply to this post with one point, in the founder's length and tone, using evidence for facts rather than quoting it. With it, live drafts read like the founders: Rico, "linkedin is the new pre-diligence layer fr 😎"; Fathin, "Exactly, a demo that works 80% of the time is just a liability… Are you currently requiring human approval before your bots send, pay, or publish? 🙂‍↕️". Its first live drafts passed every check and matched each founder's real pattern: for Rico "if you're invisible you're harder to source fr 😎" (8 words, from RP-20); for Fathin "Agreed, but… The harder problem is… How are you solving…? 🙂‍↕️" (from FP-02).
 - **Trade-off accepted:** stub drafts are fixed text and say nothing about real voice quality; live drafts depend on Gemini being available.
 - **Status:** built
@@ -69,12 +69,22 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 
 - **Belief:** reviewers should need one language and one setup command; all logic worth testing sits in the core.
 - **Options weighed:** (a) Python core + plain JS for the extension and mock feed, (b) TypeScript end to end.
-- **Picked:** (a). Pydantic schemas and pytest for the core; the browser code is small and loads into Chrome without a build step.
-- **Proof:** `./setup.sh` creates the environment, installs, and runs all tests.
+- **Picked:** (a). Pydantic schemas and pytest for the core; the local server uses Python's standard library, so there are no web dependencies. The browser code (one shared review panel, the mock feed, the extension's content script and LinkedIn adapter) is plain JavaScript that loads into Chrome without a build step.
+- **Proof:** `./setup.sh` creates the environment, installs, and runs all tests (171 at the last commit). The extension is loaded with "Load unpacked"; nothing is compiled.
 - **Trade-off accepted:** no shared types between the API and the extension; API tests guard the JSON shape instead.
-- **Status:** decided
+- **Status:** built
 
-## 9. AI use · Assistant reviews and scaffolds; I decide
+## 9. Browser experience · One review panel, for a mock feed and for LinkedIn
+
+- **Belief:** the founder decides faster when they see why DraftVoice reached its answer, not just the answer; and reviewers without LinkedIn still need to see the real flow.
+- **Options weighed:** (a) a terminal command only, (b) a separate page per surface, (c) one review panel shared by a local mock feed and the LinkedIn extension.
+- **Picked:** (c). The panel (`extension/panel.*`) shows the post (marked "untrusted input"), the steps DraftVoice took, then the draft with the evidence behind it and Approve / Edit / Skip / Reject. The steps are the API's real results played back one by one, never a fake progress bar; the run stops at the step that decided "do nothing" and says why. "Draft anyway" lets the founder overrule the gate but never the checks. The mock feed (`draftvoice serve`) holds synthetic posts tagged with what DraftVoice should do, plus three real public posts by Rico and Fathin.
+- **Proof:** `tests/test_api.py` (real steps for each way a run can stop; draft anyway; the feed's tags match what the API does; the injection post cannot get its claim into a draft; other websites are refused) and `tests/test_extension.py` (scope). Checked by hand in the browser after each phase.
+- **What changed after testing it:** the first panel showed every step and hid evidence behind hover. After using it, the steps collapse to one line once a draft is ready ("5 of 5 passed"), the evidence is listed under the draft with its source, and milestone reactions are labelled "Reaction" with "Rico wrote this before". Bugs found while testing and fixed: an edit disappeared after "Done", the panel overflowed the 380px sidebar, and an unreadable post left no way to pick another.
+- **Trade-off accepted:** the panel lives in the extension folder and is served from there, so the Python package alone does not include it. The mock feed only shows where a comment would go; posting stays manual everywhere.
+- **Status:** built
+
+## 10. AI use · Assistant reviews and scaffolds; I decide
 
 - **Belief:** an AI assistant speeds up review and setup, but every output has to be checked against the brief and my own intent.
 - **Options weighed:** (a) no AI, (b) AI writes the design, (c) AI reviews and scaffolds while the product and design decisions stay mine.
