@@ -1,0 +1,16 @@
+{
+  "founder_id": "rico",
+  "display_name": "Rico",
+  "version": 1,
+  "topics": {
+    "linkedin-content": ["linkedin", "post ideas", "content", "posting", "ghostwriting", "audience"],
+    "ai-writing": ["ai writing", "ai-written", "ai content", "chatgpt", "llm", "generic comments"]
+  },
+  "rules": [
+    {"id": "r-001", "text": "Keep it short: one or two sentences."},
+    {"id": "r-002", "text": "Lowercase and casual is fine; no emoji."}
+  ],
+  "examples": [
+    "i just use Byro"
+  ]
+}

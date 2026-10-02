@@ -1,0 +1,18 @@
+{
+  "founder_id": "alex",
+  "display_name": "Alex (synthetic)",
+  "version": 1,
+  "topics": {
+    "onboarding": ["onboarding", "activation", "new customers", "time to value"],
+    "ai-agents": ["ai agent", "ai agents", "agents", "human in the loop", "automation"],
+    "fundraising": ["fundraising", "seed round", "investors", "pitch deck"]
+  },
+  "rules": [
+    {"id": "r-001", "text": "At most two sentences."},
+    {"id": "r-002", "text": "No emoji."}
+  ],
+  "examples": [
+    "The first week decides whether a customer stays. We sit with them for all of it.",
+    "Agents should stop and ask before anything that touches money."
+  ]
+}

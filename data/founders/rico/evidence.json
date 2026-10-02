@@ -1,0 +1,22 @@
+[
+  {
+    "id": "PUB-01",
+    "founder_id": "rico",
+    "text": "Founder @ Byro | Building the AI Head of Content for high-growth teams",
+    "topics": ["linkedin-content", "ai-writing"],
+    "use": "claim",
+    "source": "LinkedIn profile headline, viewed 2 Oct 2026",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-01",
+    "founder_id": "rico",
+    "text": "i just use Byro",
+    "topics": ["linkedin-content"],
+    "use": "both",
+    "source": "LinkedIn comment on a post about finding post ideas, ~29 Sep 2026",
+    "label": "observed",
+    "approved": true
+  }
+]

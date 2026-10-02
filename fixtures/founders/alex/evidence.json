@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ev-001",
+    "founder_id": "alex",
+    "text": "We cut onboarding from 14 days to 3 by pairing each new customer with an engineer for their first week.",
+    "topics": ["onboarding"],
+    "use": "claim",
+    "source": "synthetic",
+    "label": "synthetic",
+    "approved": true
+  },
+  {
+    "id": "ev-002",
+    "founder_id": "alex",
+    "text": "Our agents stop and ask a human before any action that touches billing.",
+    "topics": ["ai-agents"],
+    "use": "claim",
+    "source": "synthetic",
+    "label": "synthetic",
+    "approved": true
+  },
+  {
+    "id": "ev-003",
+    "founder_id": "alex",
+    "text": "The hard part of agents is deciding where they should stop and ask.",
+    "topics": ["ai-agents"],
+    "use": "both",
+    "source": "synthetic",
+    "label": "synthetic",
+    "approved": true
+  },
+  {
+    "id": "ev-004",
+    "founder_id": "alex",
+    "text": "We grew revenue 4x last year after automating onboarding.",
+    "topics": ["onboarding"],
+    "use": "claim",
+    "source": "synthetic, not yet approved by the founder",
+    "label": "synthetic",
+    "approved": false
+  }
+]
