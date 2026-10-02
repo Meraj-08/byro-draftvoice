@@ -69,6 +69,13 @@ def test_team_culture_post_does_not_match_dev_velocity_evidence():
     assert proposal.decision == "do_nothing" and proposal.reason == "No evidence relates to this post."
 
 
+def test_filler_words_are_not_relevance():
+    # A marketplace milestone post shared only "post" with Rico's PUB-05 (a joke post about funding).
+    post = "Launch videos, lead gen, research. If you have work on your to-do list, post it and let someone do it."
+    rico = {e.id: e for e in load_founder("rico").evidence}
+    assert relevant(post, (rico["PUB-05"],)) == ()
+
+
 def test_shared_generic_words_are_not_relevance():
     # FP-03b shares "built" and "agent" with the Screenpipe post: two words, no relation.
     assert relevant(SCREENPIPE, (EV["FP-03b"],)) == ()
