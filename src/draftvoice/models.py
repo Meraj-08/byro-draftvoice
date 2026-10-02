@@ -37,10 +37,22 @@ class Evidence(Record):
     approved: bool
 
 
+class VoiceCheck(Record):
+    """Machine-checkable part of a voice rule. Voice checks only warn."""
+
+    max_words: int | None = Field(default=None, ge=1)
+    min_words: int | None = Field(default=None, ge=1)
+    max_sentences: int | None = Field(default=None, ge=1)
+    max_emoji: int | None = Field(default=None, ge=0)
+    lowercase: bool | None = None
+    no_hashtags: bool | None = None
+
+
 class Rule(Record):
     id: str
     text: str
     origin: Literal["seed", "learned"] = "seed"
+    check: VoiceCheck | None = None
 
 
 class VoiceProfile(Record):

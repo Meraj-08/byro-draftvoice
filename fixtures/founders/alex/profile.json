@@ -3,13 +3,41 @@
   "display_name": "Alex (synthetic)",
   "version": 1,
   "topics": {
-    "onboarding": ["onboarding", "activation", "new customers", "time to value"],
-    "ai-agents": ["ai agent", "ai agents", "agents", "human in the loop", "automation"],
-    "fundraising": ["fundraising", "seed round", "investors", "pitch deck"]
+    "onboarding": [
+      "onboarding",
+      "activation",
+      "new customers",
+      "time to value"
+    ],
+    "ai-agents": [
+      "ai agent",
+      "ai agents",
+      "agents",
+      "human in the loop",
+      "automation"
+    ],
+    "fundraising": [
+      "fundraising",
+      "seed round",
+      "investors",
+      "pitch deck"
+    ]
   },
   "rules": [
-    {"id": "r-001", "text": "At most two sentences."},
-    {"id": "r-002", "text": "No emoji."}
+    {
+      "id": "r-001",
+      "text": "At most two sentences.",
+      "check": {
+        "max_sentences": 2
+      }
+    },
+    {
+      "id": "r-002",
+      "text": "No emoji.",
+      "check": {
+        "max_emoji": 0
+      }
+    }
   ],
   "examples": [
     "The first week decides whether a customer stays. We sit with them for all of it.",

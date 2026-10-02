@@ -34,9 +34,9 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** a prompt can't guarantee honesty; code checks can be tested.
 - **Options weighed:** (a) careful prompt only, (b) prompt plus code that re-checks each sentence against its cited evidence.
 - **Picked:** (b), tested with a deliberately dishonest stub.
-- **Proof:** TBD, eval report on fabrications caught and honest drafts wrongly blocked.
-- **Trade-off accepted:** vague claims with no number, name, or "we" can still slip through. Stated in the eval report.
-- **Status:** planned
+- **Proof:** `tests/test_validate.py`. On every synthetic post that engages, the honest stub passes and each kind of lie is blocked by exactly its own check: made-up number (V2), made-up name (V3), unbacked "we built" claim (V4), citation to unknown evidence (V1), invalid output (V7). Evidence that is unapproved, or approved but not matched to the post, cannot be cited. Voice rules (length, lowercase, emoji) only warn.
+- **Trade-off accepted:** two gaps, each pinned by a test so they stay visible: a vague claim with no number, name, or "we" passes; a one-word name as the first word of a sentence passes, because treating every capitalised first word as a name blocked honest drafts ("Teams that…").
+- **Status:** built; eval numbers pending
 
 ## 5. Model · Stub by default, Gemini optional
 

@@ -76,7 +76,11 @@
   "rules": [
     {
       "id": "r-001",
-      "text": "Technical replies: two or three full sentences, about 25 to 60 words, normal capitalisation."
+      "text": "Technical replies: two or three full sentences, about 25 to 60 words, normal capitalisation.",
+      "check": {
+        "min_words": 15,
+        "max_words": 70
+      }
     },
     {
       "id": "r-002",
@@ -88,7 +92,10 @@
     },
     {
       "id": "r-004",
-      "text": "At most one emoji, usually 🙂‍↕️ or ✍🏾."
+      "text": "At most one emoji, usually 🙂‍↕️ or ✍🏾.",
+      "check": {
+        "max_emoji": 1
+      }
     }
   ],
   "examples": [

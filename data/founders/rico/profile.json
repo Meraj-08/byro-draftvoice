@@ -58,15 +58,25 @@
   "rules": [
     {
       "id": "r-001",
-      "text": "Very short: usually under 6 words, never more than about 12."
+      "text": "Very short: usually under 6 words, never more than about 12.",
+      "check": {
+        "max_words": 12
+      }
     },
     {
       "id": "r-002",
-      "text": "Lowercase and casual; slang like W, lfg, ngl, fr is fine; no hashtags."
+      "text": "Lowercase and casual; slang like W, lfg, ngl, fr is fine; no hashtags.",
+      "check": {
+        "lowercase": true,
+        "no_hashtags": true
+      }
     },
     {
       "id": "r-003",
-      "text": "At most two emoji, from the ones he uses: 🚀 😎 😂."
+      "text": "At most two emoji, from the ones he uses: 🚀 😎 😂.",
+      "check": {
+        "max_emoji": 2
+      }
     },
     {
       "id": "r-004",

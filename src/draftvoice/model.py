@@ -99,12 +99,21 @@ class HonestStub:
 
 # Each kind slips one unsupported claim into an otherwise honest draft,
 # and cites real evidence so the citation alone looks fine.
+# Each lie trips exactly one check, so every check is proven on its own.
 FABRICATIONS = {
-    "number": "That change alone grew our pipeline 312% in 6 months.",
-    "name": "Stripe told us the same thing when they became a customer.",
+    "number": "Teams that do this see 312% faster activation.",
+    "name": "This is exactly how Stripe treats every new account.",
     "first_person": "We built our own agent framework to solve exactly this.",
     "unknown_evidence": None,
     "bad_json": None,
+}
+# Which check must block each kind.
+EXPECTED_CHECK = {
+    "number": "V2 numbers",
+    "name": "V3 names",
+    "first_person": "V4 first person",
+    "unknown_evidence": "V1 evidence",
+    "bad_json": "V7 format",
 }
 
 
@@ -123,7 +132,7 @@ class DishonestStub:
         sentences = parse_output(HonestStub().draft(request))
         cited = [request.evidence[0].id]
         if self.kind == "unknown_evidence":
-            sentences.append(Sentence(text="This is backed by our internal data.", evidence_ids=["ev-999"]))
+            sentences.append(Sentence(text="Internal data backs this up.", evidence_ids=["ev-999"]))
         else:
             sentences.append(Sentence(text=FABRICATIONS[self.kind], evidence_ids=cited))
         return _to_json(sentences[:MAX_SENTENCES])
