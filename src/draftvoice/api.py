@@ -19,6 +19,8 @@ WEB = Path(__file__).parent / "web"
 # The only files the server hands out. No directory listing, no paths outside web/.
 STATIC = {
     "feed.html": "text/html; charset=utf-8",
+    "feed.css": "text/css; charset=utf-8",
+    "feed.js": "text/javascript; charset=utf-8",
     "panel.html": "text/html; charset=utf-8",
     "panel.css": "text/css; charset=utf-8",
     "panel.js": "text/javascript; charset=utf-8",

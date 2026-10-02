@@ -88,7 +88,10 @@ def request(url, body=None, origin=None):
 
 def test_server_serves_the_feed_page(server):
     status, html, _ = request(server + "/")
-    assert status == 200 and "DraftVoice" in html and "never posts" in html
+    assert status == 200 and "DraftVoice" in html and "Nothing here is LinkedIn" in html
+    assert 'src="panel.html"' in html
+    for name in ("feed.css", "feed.js"):
+        assert request(f"{server}/{name}")[0] == 200
 
 
 def test_server_refuses_other_websites(server):
@@ -205,3 +208,49 @@ def test_panel_has_no_inline_scripts_or_handlers():
     assert re.findall(r"<script[^>]*>", html) == ['<script src="panel.js">']
     assert not re.search(r"\son[a-z]+=", html)
     assert "Nothing is sent to LinkedIn." in html and "untrusted input" in html
+
+
+# The mock feed's labels must stay true
+
+FEED = json.loads((__import__("draftvoice.store", fromlist=["FIXTURES_DIR"]).FIXTURES_DIR / "feed.json").read_text())
+
+
+def outcome(founder, text):
+    _, v = post("/api/propose", {"founder": founder, "text": text, "drafter": "stub"})
+    return "draft" if v["decision"] == "draft" else v["reason_code"]
+
+
+def test_feed_covers_every_scenario():
+    outcomes = {outcome(f, p["text"]) for p in FEED["posts"] for f in ("rico", "fathin")}
+    assert {"draft", "off_topic", "no_evidence", "celebration", "sensitive"} <= outcomes
+    assert any("INSTRUCTIONS" in p["text"] for p in FEED["posts"])  # an injection post
+    assert sum(p["kind"] == "real" for p in FEED["posts"]) >= 2
+
+
+def test_real_posts_cite_evidence_that_exists():
+    import re
+    from draftvoice.api import WEB  # noqa: F401  (keeps the import style of this file)
+    evidence_md = (WEB.parents[2] / "docs" / "evidence.md").read_text()
+    for p in (p for p in FEED["posts"] if p["kind"] == "real"):
+        ids = re.findall(r"\b(?:RP|FP|FD|RS)-\d+\b", p["tag"])
+        assert ids and all(f"| {i} |" in evidence_md for i in ids), p["id"]
+
+
+def test_feed_tags_match_what_the_api_does():
+    expect = {
+        "f-profile": {"rico": "draft"},
+        "f-agent": {"rico": "off_topic", "fathin": "draft"},
+        "f-slop": {"fathin": "no_evidence"},
+        "f-yc": {"rico": "celebration", "fathin": "celebration"},
+        "f-layoff": {"rico": "sensitive", "fathin": "sensitive"},
+    }
+    texts = {p["id"]: p["text"] for p in FEED["posts"]}
+    for post_id, by_founder in expect.items():
+        for founder, want in by_founder.items():
+            assert outcome(founder, texts[post_id]) == want, (post_id, founder)
+
+
+def test_injection_post_cannot_put_its_claim_in_the_draft():
+    text = next(p["text"] for p in FEED["posts"] if p["id"] == "f-injection")
+    _, v = post("/api/propose", {"founder": "rico", "text": text, "drafter": "stub"})
+    assert "50M" not in v["draft"] and "Sequoia" not in v["draft"]

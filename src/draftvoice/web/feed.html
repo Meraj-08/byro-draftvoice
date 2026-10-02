@@ -5,241 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DraftVoice Mock Feed</title>
 <link rel="icon" href="data:,">
-<style>
-  :root {
-    --bg: #f3f2ef; --card: #ffffff; --text: #1d1d1b; --muted: #66645f; --line: #e2e0db;
-    --accent: #0a66c2; --accent-soft: #e8f1fb; --ok: #1f7a3d; --ok-soft: #e7f4ec;
-    --bad: #b3261e; --bad-soft: #fbeaea; --warn: #8a5a00; --warn-soft: #fdf3dc; --chip: #f1f0ec;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1b1f23; --card: #24292e; --text: #e8e6e3; --muted: #a3a09a; --line: #353b42;
-      --accent: #70b5f9; --accent-soft: #1d3247; --ok: #7bd69a; --ok-soft: #1f3528;
-      --bad: #ff8a80; --bad-soft: #3d2423; --warn: #f2c46d; --warn-soft: #3a3020; --chip: #2f353b;
-    }
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text);
-         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  header { position: sticky; top: 0; z-index: 2; background: var(--card); border-bottom: 1px solid var(--line); }
-  .bar { max-width: 680px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-  .brand { font-weight: 700; }
-  .brand small { font-weight: 400; color: var(--muted); }
-  .spacer { flex: 1; }
-  .notice { background: var(--accent-soft); color: var(--text); text-align: center; font-size: 13px; padding: 6px 16px; }
-  main { max-width: 680px; margin: 16px auto 48px; padding: 0 16px; display: grid; gap: 12px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
-  .who { display: flex; gap: 10px; align-items: center; }
-  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--chip); display: grid;
-            place-items: center; font-weight: 600; color: var(--muted); flex: none; }
-  .name { font-weight: 600; }
-  .meta { color: var(--muted); font-size: 13px; }
-  .text { margin: 10px 0 12px; white-space: pre-wrap; }
-  .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; }
-  select, button, textarea { font: inherit; color: inherit; }
-  select { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
-  button { border: 1px solid var(--line); background: var(--card); border-radius: 18px; padding: 5px 14px; cursor: pointer; }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  @media (prefers-color-scheme: dark) { button.primary { color: #0d1117; } }
-  button:disabled { opacity: .5; cursor: default; }
-  .panel { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 10px; }
-  .decision { font-weight: 600; }
-  .decision.draft { color: var(--ok); }
-  .decision.nothing { color: var(--muted); }
-  textarea { width: 100%; min-height: 70px; resize: vertical; border: 1px solid var(--line); border-radius: 6px;
-             padding: 8px; background: var(--card); }
-  .label { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 4px; }
-  .evidence { display: grid; gap: 6px; font-size: 14px; }
-  .evidence .src { color: var(--muted); font-size: 12px; }
-  .chip { display: inline-block; background: var(--chip); border-radius: 4px; padding: 0 6px; font-size: 12px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-right: 6px; }
-  .checks { display: flex; gap: 6px; flex-wrap: wrap; }
-  .check { font-size: 12px; border-radius: 4px; padding: 1px 7px; }
-  .check.pass { background: var(--ok-soft); color: var(--ok); }
-  .check.fail { background: var(--bad-soft); color: var(--bad); }
-  .detail { font-size: 13px; color: var(--bad); }
-  .warn { font-size: 13px; background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 6px 8px; }
-  .row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .comment { margin-top: 10px; display: flex; gap: 8px; align-items: flex-start; }
-  .comment .box { flex: 1; border: 1px solid var(--line); border-radius: 18px; padding: 7px 12px; color: var(--muted); min-height: 36px; }
-  .comment .box.filled { color: var(--text); border-color: var(--ok); }
-  .status { font-size: 13px; color: var(--ok); }
-  .suggest { background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; }
-  #feed { display: grid; gap: 12px; }
-  #rules { display: none; }
-  #rules.open { display: grid; gap: 8px; }
-  .rule { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 14px; }
-  .muted { color: var(--muted); }
-  .error { color: var(--bad); font-size: 14px; }
-  @media (max-width: 520px) { .bar { gap: 8px; } }
-</style>
+<link rel="stylesheet" href="feed.css">
 </head>
 <body>
-<header>
-  <div class="bar">
-    <div class="brand">DraftVoice <small>mock feed</small></div>
-    <div class="spacer"></div>
-    <label class="meta">Drafter
-      <select id="drafter">
-        <option value="stub">Offline stub</option>
-        <option value="gemini">Gemini (live)</option>
-      </select>
-    </label>
-    <button id="rulesToggle">Voice rules</button>
+<header class="nav">
+  <div class="nav-inner">
+    <span class="logo">in</span>
+    <span class="nav-title">Mock feed</span>
+    <span class="nav-note">Synthetic posts, plus public excerpts by Rico and Fathin. Nothing here is LinkedIn.</span>
   </div>
-  <div class="notice">Synthetic posts by fictional authors. DraftVoice never posts: approving only fills this mock comment box.</div>
 </header>
 
-<main>
-  <section id="rules" class="card" aria-label="Voice rules"></section>
-  <div id="feed"></div>
-</main>
+<div class="pick-banner" id="pickBanner" hidden>Click the post you want to draft for. <button id="pickCancel">Cancel</button></div>
 
-<script>
-const $ = (sel, el = document) => el.querySelector(sel);
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
-let founders = [];
+<main class="feed" id="feed"></main>
 
-async function api(path, body) {
-  const res = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || res.statusText);
-  return data;
-}
+<button class="edge-tab" id="edgeTab" aria-label="Open DraftVoice" aria-expanded="false">
+  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h12v9H8l-4 3z" fill="currentColor"/></svg>
+  <span>DraftVoice</span>
+</button>
 
-function initials(name) { return name.split(" ").map(w => w[0]).slice(0, 2).join(""); }
+<aside class="drawer" id="drawer" aria-label="DraftVoice" aria-hidden="true">
+  <iframe id="panel" src="panel.html" title="DraftVoice review panel" allow="clipboard-write"></iframe>
+</aside>
 
-function postCard(post) {
-  const card = document.createElement("article");
-  card.className = "card";
-  card.innerHTML = `
-    <div class="who">
-      <div class="avatar">${esc(initials(post.author))}</div>
-      <div><div class="name">${esc(post.author)}</div><div class="meta">${esc(post.headline)} · ${esc(post.time)}</div></div>
-    </div>
-    <div class="text">${esc(post.text)}</div>
-    <div class="actions">
-      <span class="meta">Draft as</span>
-      <select class="founder">${founders.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join("")}</select>
-      <button class="primary draft">Draft comment</button>
-    </div>
-    <div class="slot"></div>
-    <div class="comment"><div class="box">Add a comment…</div></div>`;
-  $(".draft", card).onclick = () => draft(card, post);
-  return card;
-}
-
-async function draft(card, post) {
-  const slot = $(".slot", card), btn = $(".draft", card);
-  btn.disabled = true;
-  resetComment(card);
-  slot.innerHTML = `<div class="panel muted">Thinking…</div>`;
-  try {
-    const p = await api("/api/propose", {founder: $(".founder", card).value, text: post.text, drafter: $("#drafter").value});
-    slot.innerHTML = "";
-    slot.append(proposalPanel(p, card));
-  } catch (e) {
-    slot.innerHTML = `<div class="panel error">${esc(e.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-function proposalPanel(p, card) {
-  const el = document.createElement("div");
-  el.className = "panel";
-  const checks = p.checks.length ? `<div><div class="label">Checks</div><div class="checks">${
-    p.checks.map(c => `<span class="check ${c.passed ? "pass" : "fail"}" title="${esc(c.detail)}">${esc(c.check.split(" ")[0])} ${c.passed ? "✓" : "✗"}</span>`).join("")
-  }</div>${p.checks.filter(c => !c.passed).map(c => `<div class="detail">✗ ${esc(c.check)}: ${esc(c.detail)}</div>`).join("")}</div>` : "";
-  const warnings = p.warnings.map(w => `<div class="warn">⚠ ${esc(w.detail)} <span class="muted">(voice rule, your call)</span></div>`).join("");
-  if (p.decision !== "draft") {
-    el.innerHTML = `<div class="decision nothing">Do nothing · ${esc(p.founder.name)}</div><div>${esc(p.reason)}</div>${checks}
-      <div class="row"><button class="skip">OK, skip</button></div>`;
-    $(".skip", el).onclick = () => review(el, p, "skip");
-    return el;
-  }
-  el.innerHTML = `
-    <div class="decision draft">Draft for ${esc(p.founder.name)} <span class="meta">· profile v${p.founder.version}</span></div>
-    <textarea aria-label="Draft comment">${esc(p.draft)}</textarea>
-    ${warnings}
-    <div><div class="label">Evidence behind it</div><div class="evidence">${
-      p.evidence.map(e => `<div><span class="chip">${esc(e.id)}</span>${esc(e.text)}<div class="src">${esc(e.source)}</div></div>`).join("")
-    }</div></div>
-    ${checks}
-    <div class="row"><button class="primary approve">Approve</button><button class="reject">Reject</button><button class="skip">Skip</button></div>`;
-  $(".approve", el).onclick = () => {
-    const text = $("textarea", el).value.trim();
-    review(el, p, text === p.draft.trim() ? "accept" : "edit", text, card);
-  };
-  $(".reject", el).onclick = () => review(el, p, "reject");
-  $(".skip", el).onclick = () => review(el, p, "skip");
-  return el;
-}
-
-async function review(panel, p, action, text, card) {
-  panel.querySelectorAll("button").forEach(b => b.disabled = true);
-  try {
-    const r = await api("/api/review", {proposal_id: p.id, action, edited_text: action === "edit" ? text : null});
-    const done = {accept: "Approved as drafted.", edit: "Approved with your edit.", reject: "Rejected.", skip: "Skipped."}[action];
-    panel.insertAdjacentHTML("beforeend", `<div class="status">${done}</div>`);
-    if (r.final_text && card) {
-      resetComment(card);
-      const box = $(".comment .box", card);
-      box.textContent = r.final_text;
-      box.classList.add("filled");
-      $(".comment", card).insertAdjacentHTML("afterend", `<div class="status ready">Ready. Post it yourself; DraftVoice never posts.</div>`);
-    }
-    if (r.suggestion) panel.append(suggestion(r.suggestion));
-  } catch (e) {
-    panel.insertAdjacentHTML("beforeend", `<div class="error">${esc(e.message)}</div>`);
-  }
-}
-
-function resetComment(card) {
-  const box = $(".comment .box", card);
-  box.textContent = "Add a comment…";
-  box.classList.remove("filled");
-  card.querySelectorAll(".ready").forEach(el => el.remove());
-}
-
-function suggestion(s) {
-  const el = document.createElement("div");
-  el.className = "suggest";
-  el.innerHTML = `<div><strong>You made this change twice.</strong> Suggested voice rule: ${esc(s.rule)}</div>
-    <div class="row"><button class="primary">Apply rule</button><button>Ignore</button></div>`;
-  const [yes, no] = el.querySelectorAll("button");
-  yes.onclick = async () => { const r = await api("/api/rules/approve", {id: s.id}); el.innerHTML = `Applied. ${esc(s.founder_id)} is now on profile v${r.version}.`; loadFounders(); };
-  no.onclick = async () => { await api("/api/rules/reject", {id: s.id}); el.innerHTML = "Ignored. Nothing changed."; };
-  return el;
-}
-
-async function renderRules() {
-  const box = $("#rules");
-  const data = await api("/api/rules");
-  const versions = Object.entries(data.active_version).map(([f, v]) =>
-    `<div class="rule"><strong>${esc(f)}</strong> profile v${v} ${v > 1 ? `<button data-revert="${esc(f)}">Revert to previous</button>` : ""}</div>`).join("");
-  const rules = data.rules.map(r => `<div class="rule"><span class="chip">${esc(r.status)}</span>${esc(r.founder_id)}: ${esc(r.rule)}
-      ${r.status === "suggested" ? `<button data-approve="${esc(r.id)}">Apply</button><button data-reject="${esc(r.id)}">Ignore</button>` : ""}</div>`).join("")
-    || `<div class="muted">No suggestions yet. One edit never makes a rule; the same change twice suggests one.</div>`;
-  box.innerHTML = `<div class="label">Voice rules learned from your edits</div>${versions}${rules}`;
-  box.querySelectorAll("[data-revert]").forEach(b => b.onclick = async () => { await api("/api/rules/revert", {founder: b.dataset.revert}); renderRules(); loadFounders(); });
-  box.querySelectorAll("[data-approve]").forEach(b => b.onclick = async () => { await api("/api/rules/approve", {id: b.dataset.approve}); renderRules(); loadFounders(); });
-  box.querySelectorAll("[data-reject]").forEach(b => b.onclick = async () => { await api("/api/rules/reject", {id: b.dataset.reject}); renderRules(); });
-}
-
-$("#rulesToggle").onclick = () => { const box = $("#rules"); box.classList.toggle("open"); if (box.classList.contains("open")) renderRules(); };
-
-async function loadFounders() { founders = (await api("/api/founders")).founders; }
-
-(async () => {
-  try {
-    await loadFounders();
-    const feed = await api("/api/feed");
-    feed.posts.forEach(p => $("#feed").append(postCard(p)));
-  } catch (e) {
-    $("#feed").innerHTML = `<div class="card error">Could not reach DraftVoice: ${esc(e.message)}</div>`;
-  }
-})();
-</script>
+<script src="feed.js"></script>
 </body>
 </html>

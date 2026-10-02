@@ -30,7 +30,7 @@ See it in the browser:
 .venv/bin/draftvoice serve        # then open http://127.0.0.1:8765
 ```
 
-A mock feed of synthetic posts. Pick Rico or Fathin, draft a comment, see the evidence and every check, edit, and approve. Approving fills the mock comment box; nothing is ever posted. The server only listens on this machine and refuses requests from other websites.
+A mock feed of synthetic posts plus a few real public posts by Rico and Fathin (each tagged). Click the **DraftVoice** tab on the right edge: a sidebar opens, reads the post most visible on screen, and shows each step of the decision, then the draft with its evidence. Switch between Rico and Fathin, edit, and approve. Approving copies the comment; nothing is ever posted. "Not this post?" lets you click a different post. The server only listens on this machine and refuses requests from other websites.
 
 Review a draft from the terminal instead. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
 
