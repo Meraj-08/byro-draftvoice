@@ -3,7 +3,7 @@
 <p align="center">
   <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-3775a9">
   <img alt="Tests" src="https://img.shields.io/badge/tests-180%20passing-brightgreen">
-  <img alt="No API key needed" src="https://img.shields.io/badge/API%20key-not%20needed-6aa6f8">
+  <img alt="Drafts: Gemini or offline stub" src="https://img.shields.io/badge/drafts-Gemini%20%7C%20offline%20stub-6aa6f8">
   <a href="docs/eval-report.md"><img alt="Eval report" src="https://img.shields.io/badge/eval-report-orange"></a>
 </p>
 
