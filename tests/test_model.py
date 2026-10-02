@@ -110,6 +110,35 @@ def test_gemini_errors_become_model_errors(monkeypatch):
         GeminiDrafter("fake-key").draft(request())
 
 
+@pytest.mark.parametrize("code, status, hint", [
+    (400, "INVALID_ARGUMENT", "API key is not valid"),
+    (403, "PERMISSION_DENIED", "AIza"),
+    (404, "NOT_FOUND", "model 'gemini-x' is not available"),
+    (429, "RESOURCE_EXHAUSTED", "quota"),
+])
+def test_gemini_errors_say_what_to_fix(monkeypatch, code, status, hint):
+    from google import genai
+
+    class ClientError(Exception):
+        def __init__(self):
+            super().__init__("secret response body")
+            self.code, self.status = code, status
+
+    class Client:
+        def __init__(self, api_key):
+            self.models = self
+
+        def generate_content(self, **kwargs):
+            raise ClientError()
+
+    monkeypatch.setattr(genai, "Client", Client)
+    with pytest.raises(ModelError) as err:
+        GeminiDrafter("fake-key", model="gemini-x").draft(request())
+    message = str(err.value)
+    assert f"ClientError {code} {status}" in message and hint in message
+    assert "fake-key" not in message and "secret response body" not in message
+
+
 def test_env_file_parsing(tmp_path, monkeypatch):
     for key in ("MODEL_MODE", "GEMINI_API_KEY", "GEMINI_MODEL"):
         monkeypatch.delenv(key, raising=False)

@@ -179,10 +179,33 @@ class GeminiDrafter:
                 ),
             )
         except Exception as exc:  # network, quota, auth: all fail closed
-            raise ModelError(f"Gemini call failed: {exc.__class__.__name__}") from exc
+            raise ModelError(f"Gemini call failed: {_explain(exc, self.model)}") from exc
         if not response.text:
             raise ModelError("Gemini returned no text")
         return response.text
+
+
+# What a Gemini error code usually means, so the founder can fix it without reading a traceback.
+GEMINI_HINTS = {
+    400: "the request was rejected; often the API key is not valid",
+    401: "the API key is not valid for the Gemini API (AI Studio keys start with AIza)",
+    403: "the API key is not allowed to use the Gemini API (AI Studio keys start with AIza)",
+    404: "model '{model}' is not available for this key; set GEMINI_MODEL in .env",
+    429: "quota or rate limit reached; wait a minute or check your plan",
+    500: "Gemini had an internal error; try again",
+    503: "Gemini is overloaded; try again in a moment",
+}
+
+
+def _explain(exc: Exception, model: str) -> str:
+    """The error type and code plus a hint. Never the key or the response body."""
+    code = getattr(exc, "code", None)
+    if not isinstance(code, int):
+        return exc.__class__.__name__
+    status = getattr(exc, "status", None)
+    hint = GEMINI_HINTS.get(code, "")
+    label = f"{exc.__class__.__name__} {code}" + (f" {status}" if isinstance(status, str) and status else "")
+    return label + (f": {hint.format(model=model)}" if hint else "")
 
 
 def _as_sentence(text: str) -> str:
