@@ -12,7 +12,8 @@ Timebox: 10 hours of active work. Times in IST; breaks and waiting not counted.
 | Browser experience: review panel, mock feed, LinkedIn extension, fixes from live testing | 19:00–21:00 | 2:00 |
 | UI polish and testing; draft fix (relevance and copy checks) and README | 21:45–22:15 | 0:30 |
 | More fixes from testing, instead of recording the walkthrough: relevance check, drafting loader, Gemini as default, clearer Gemini errors, reading LinkedIn saved posts | 22:15–23:08 | 0:53 |
-| README and setup docs, demo script and walkthrough | 23:08–23:56 | 0:48 |
-| **Total** | | **~10:11** (about 11 minutes over the 10-hour box) |
+| README and setup docs, demo script | 23:08–23:2 | 0:12 |
+| Walkthrough video (time spent freeing disk space on my Mac not counted) | 23:20–23:55 | under 0:35 |
+| **Total** | | **under 10:00** |
 
-Finished on Fri 2 Oct 2026 at 23:56 IST.
+Completed on Fri 2 Oct 2026 at 23:55 IST.
