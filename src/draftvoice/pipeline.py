@@ -3,6 +3,7 @@
 import hashlib
 import uuid
 
+import json
 from dataclasses import dataclass
 
 from draftvoice.gate import MAX_EVIDENCE, GateResult, decide
@@ -65,6 +66,8 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
         return proposal, steps
 
     gate = decide(post, founder)
+    if gate.reason_code == "celebration" and not override:
+        return _react(post, founder, gate, base, steps, stop)
     overruled = override and not gate.engage and gate.reason_code in OVERRIDABLE
     original_reason = gate.reason
     if overruled:
@@ -100,7 +103,9 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
         reason = f"Model failed: {exc}"
         return stop("drafting", LABELS["drafting"], reason,
                     Proposal(**base, decision="do_nothing", reason=reason, reason_code="model_error"))
-    steps.append(Step("drafting", LABELS["drafting"], "done", f"Drafted by {drafter.name}"))
+    writer = ("the offline test writer, which pastes evidence; turn on Live model for a real draft"
+              if drafter.name == "honest-stub" else drafter.name)
+    steps.append(Step("drafting", LABELS["drafting"], "done", f"Drafted by {writer}"))
 
     result = validate(raw, post.text, gate.evidence, founder.profile)
     if not result.passed:
@@ -125,6 +130,39 @@ def run(post: Post, founder: Founder, drafter: Drafter, override: bool = False) 
         sentences=list(result.sentences),
         checks=list(result.checks),
     ), steps
+
+
+def _react(post: Post, founder: Founder, gate: GateResult, base: dict, steps: list, stop):
+    """Milestone posts get one of the founder's own past reactions, not a written comment (finding K1).
+    No model is called. The reaction still has to pass every check against the evidence it cites."""
+    name = founder.profile.display_name
+    approved = {e.id: e for e in founder.evidence}
+    # Reactions written for this kind of milestone first, then general ones.
+    fitting = [r for r in founder.profile.reactions
+               if r.evidence_id in approved and (gate.occasion in r.occasions or "milestone" in r.occasions)]
+    fitting.sort(key=lambda r: gate.occasion not in r.occasions)
+    for reaction in fitting:
+        evidence = (approved[reaction.evidence_id],)
+        raw = json.dumps({"sentences": [{"text": reaction.text, "evidence_ids": [reaction.evidence_id]}]})
+        result = validate(raw, post.text, evidence, founder.profile)
+        if not result.passed:
+            continue
+        steps.append(Step("topics", LABELS["topics"], "done",
+                          f"A milestone ({gate.occasion}). {name} usually answers these with a short reaction."))
+        steps.append(Step("evidence", LABELS["evidence"], "done",
+                          f"{name}'s own past reaction: {reaction.evidence_id}"))
+        steps.append(Step("drafting", LABELS["drafting"], "done",
+                          f"Picked from {name}'s past reactions; no model was used"))
+        steps.append(Step("checks", LABELS["checks"], "done", "V1–V7 passed"))
+        return Proposal(
+            **base, decision="draft",
+            reason=f"A milestone post. Suggested: a reaction {name} has written before.",
+            sentences=list(result.sentences), checks=list(result.checks),
+        ), steps
+    reason = (f"A milestone post. {name} has no recorded reaction for this kind of post, "
+              "so a cheer is better written by them.")
+    return stop("topics", LABELS["topics"], reason,
+                Proposal(**base, decision="do_nothing", reason=reason, reason_code="celebration"))
 
 
 LABELS = {

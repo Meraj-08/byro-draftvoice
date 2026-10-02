@@ -78,7 +78,7 @@ def handle(method: str, path: str, body: dict | None = None) -> tuple[int, dict]
     body = body or {}
     try:
         if method == "GET" and url.path == "/api/founders":
-            return 200, {"founders": [
+            return 200, {"live_available": bool(load_env().get("GEMINI_API_KEY")), "founders": [
                 {"id": f, "name": learning.current_founder(f).profile.display_name,
                  "version": learning.current_founder(f).profile.version}
                 for f in FOUNDERS if f in list_founders()]}

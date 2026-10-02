@@ -316,5 +316,65 @@
     "source": "Rico's LinkedIn post, 22 May 2026 (docs/evidence.md)",
     "label": "observed",
     "approved": true
+  },
+  {
+    "id": "RS-25",
+    "founder_id": "rico",
+    "text": "congrats!",
+    "topics": [
+      "reactions"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn comment, ~25 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-13",
+    "founder_id": "rico",
+    "text": "congrats!",
+    "topics": [
+      "reactions"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn comment, 28 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-03",
+    "founder_id": "rico",
+    "text": "LFG🚀",
+    "topics": [
+      "reactions"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn comment, 1 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-15",
+    "founder_id": "rico",
+    "text": "W",
+    "topics": [
+      "reactions"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn comment, 28 Sep 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
+  },
+  {
+    "id": "RS-05",
+    "founder_id": "rico",
+    "text": "young goats",
+    "topics": [
+      "reactions"
+    ],
+    "use": "voice",
+    "source": "Rico's LinkedIn comment, 1 Oct 2026 (docs/evidence.md)",
+    "label": "observed",
+    "approved": true
   }
 ]

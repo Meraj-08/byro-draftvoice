@@ -35,7 +35,7 @@ def test_accept_and_edit_are_saved_append_only():
 
 
 def test_cannot_accept_when_draftvoice_proposed_nothing():
-    proposal = drafted(text="Excited to announce we just joined Y Combinator!")
+    proposal = drafted(text="Today we had to lay off a third of the team. I'm heartbroken.")
     with pytest.raises(learning.ReviewError):
         learning.review(proposal.id, "accept")
     learning.review(proposal.id, "skip")  # skipping is always allowed

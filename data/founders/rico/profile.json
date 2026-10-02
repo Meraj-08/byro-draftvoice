@@ -93,5 +93,41 @@
     "f reddit ngl",
     "ai comment?",
     "magic of Byro"
+  ],
+  "reactions": [
+    {
+      "text": "congrats!",
+      "evidence_id": "RS-25",
+      "occasions": [
+        "funding",
+        "joining",
+        "win",
+        "launch",
+        "milestone"
+      ]
+    },
+    {
+      "text": "W",
+      "evidence_id": "RS-15",
+      "occasions": [
+        "joining",
+        "win"
+      ]
+    },
+    {
+      "text": "LFG🚀",
+      "evidence_id": "RS-03",
+      "occasions": [
+        "launch",
+        "funding"
+      ]
+    },
+    {
+      "text": "young goats",
+      "evidence_id": "RS-05",
+      "occasions": [
+        "win"
+      ]
+    }
   ]
 }

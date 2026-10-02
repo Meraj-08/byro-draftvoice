@@ -28,13 +28,24 @@ BAIT = [
 CELEBRATION = [
     r"\b(excited|thrilled|proud|happy|delighted) to (announce|share)\b",
     r"\bpersonal news\b",
-    r"\b(we|i) (just )?(raised|closed)\b",
+    r"\b(we|i)('ve| have)? (just |finally )?(raised|closed|secured)\b",
+    r"\b(pre-?seed|seed|series [a-e]) (round|funding)\b",
+    r"\b(funding|round) (led|co-led) by\b",
+    r"\b(we|i)('ve| have)? (just |finally )?launched\b",
     r"\b(joined|joining) (y combinator|yc)\b",
     r"\b(got |been )?accepted (into|to)\b",
     r"\b(we|i) (just )?won\b",
     r"\bcongrat(s|ulations)\b",
     r"\b(starting|started) a new (role|position|job)\b",
     r"\bgraduated\b",
+]
+# What kind of milestone it is, to pick a fitting reaction. First match wins.
+OCCASIONS = [
+    ("funding", r"\b(raised|funding|pre-?seed|seed round|series [a-e]|investors?|round)\b"),
+    ("joining", r"\b(joined|joining|accepted|new (role|position|job))\b"),
+    ("win", r"\b(won|winners?|award|prize|place)\b"),
+    ("launch", r"\b(launch(ed)?|live|shipped|introducing)\b"),
+    ("personal", r"\b(graduated|birthday|married|baby)\b"),
 ]
 MAX_EVIDENCE = 3
 
@@ -46,6 +57,7 @@ class GateResult:
     reason_code: ReasonCode | None = None
     topics: tuple[str, ...] = ()
     evidence: tuple[Evidence, ...] = field(default=())
+    occasion: str | None = None  # set for milestone posts
 
 
 def normalize(text: str) -> str:
@@ -73,8 +85,10 @@ def decide(post: Post, founder: Founder) -> GateResult:
         return GateResult(False, "Engagement bait; there is nothing to add.", "off_topic")
 
     if any(re.search(pattern, text) for pattern in CELEBRATION):
+        occasion = next((name for name, pattern in OCCASIONS if re.search(pattern, text)), "milestone")
         return GateResult(
-            False, "A milestone post. A quick cheer is better written by the founder.", "celebration"
+            False, "A milestone post. A quick cheer is better written by the founder.", "celebration",
+            occasion=occasion,
         )
 
     topics = tuple(

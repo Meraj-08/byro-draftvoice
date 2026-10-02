@@ -55,6 +55,14 @@ class Rule(Record):
     check: VoiceCheck | None = None
 
 
+class Reaction(Record):
+    """A short reaction the founder really wrote, reused for milestone posts. Cites its evidence item."""
+
+    text: str = Field(min_length=1)
+    evidence_id: str
+    occasions: list[str]  # funding, joining, win, launch, personal, milestone
+
+
 class VoiceProfile(Record):
     founder_id: str
     display_name: str
@@ -64,6 +72,7 @@ class VoiceProfile(Record):
     rules: list[Rule] = []
     # the founder's recent comments, used for voice and the repeats check
     examples: list[str] = []
+    reactions: list[Reaction] = []
 
 
 class Sentence(Record):

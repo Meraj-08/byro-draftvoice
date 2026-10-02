@@ -309,16 +309,21 @@
   });
 
   async function loadFounders() {
-    state.founders = (await api("/api/founders")).founders;
-    const saved = store("draftvoice.founder");
-    if (!state.founder) state.founder = state.founders.some((f) => f.id === saved) ? saved : state.founders[0]?.id;
+    const data = await api("/api/founders");
+    state.founders = data.founders;
+    // Use the live model when it is set up, unless the founder turned it off before.
+    const saved = store("draftvoice.live");
+    $("live").checked = saved === null ? !!data.live_available : saved === "1";
+    $("live").disabled = !data.live_available;
+    $("live").parentElement.title = data.live_available ? "" : "Add GEMINI_API_KEY to .env to enable";
+    const savedFounder = store("draftvoice.founder");
+    if (!state.founder) state.founder = state.founders.some((f) => f.id === savedFounder) ? savedFounder : state.founders[0]?.id;
     renderFounders();
   }
 
   // On LinkedIn the content script says so, and the founder can choose how the post is picked.
   $("method").addEventListener("change", () => tell({ type: "draftvoice:method", method: $("method").value }));
 
-  $("live").checked = store("draftvoice.live") === "1";
   $("live").addEventListener("change", () => store("draftvoice.live", $("live").checked ? "1" : "0"));
 
   (async () => {

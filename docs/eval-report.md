@@ -2,7 +2,7 @@
 
 This report tests DraftVoice's riskiest assumption: that it knows when *not* to comment, and never puts an unsupported claim in a founder's mouth.
 
-> **Directional, not statistical.** The samples are small and partly adversarial. The checks were frozen before measuring (`validate.py` e21a4bc10e8a, `gate.py` 734c73f26644) and were not tuned afterwards.
+> **Directional, not statistical.** The samples are small and partly adversarial. The checks were frozen before measuring (`validate.py` e21a4bc10e8a, `gate.py` 5f2e1bb8acd5) and were not tuned afterwards.
 
 To regenerate this report, run `draftvoice eval`.
 
