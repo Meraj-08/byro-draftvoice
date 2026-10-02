@@ -13,17 +13,19 @@ from draftvoice import learning
 from draftvoice.model import ModelError, get_drafter, load_env
 from draftvoice.models import Proposal
 from draftvoice.pipeline import OVERRIDABLE, post_from_text, run
-from draftvoice.store import FIXTURES_DIR, DataError, Founder, list_founders
+from draftvoice.store import FIXTURES_DIR, ROOT, DataError, Founder, list_founders
 
 WEB = Path(__file__).parent / "web"
-# The only files the server hands out. No directory listing, no paths outside web/.
+# The review panel lives in the extension folder, so the mock feed and the extension use the same files.
+EXTENSION = ROOT / "extension"
+# The only files the server hands out: name -> (folder, content type). No listing, nothing else.
 STATIC = {
-    "feed.html": "text/html; charset=utf-8",
-    "feed.css": "text/css; charset=utf-8",
-    "feed.js": "text/javascript; charset=utf-8",
-    "panel.html": "text/html; charset=utf-8",
-    "panel.css": "text/css; charset=utf-8",
-    "panel.js": "text/javascript; charset=utf-8",
+    "feed.html": (WEB, "text/html; charset=utf-8"),
+    "feed.css": (WEB, "text/css; charset=utf-8"),
+    "feed.js": (WEB, "text/javascript; charset=utf-8"),
+    "panel.html": (EXTENSION, "text/html; charset=utf-8"),
+    "panel.css": (EXTENSION, "text/css; charset=utf-8"),
+    "panel.js": (EXTENSION, "text/javascript; charset=utf-8"),
 }
 FOUNDERS = ("rico", "fathin")
 DRAFTERS = ("stub", "gemini")
@@ -172,7 +174,8 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         name = "feed.html" if path in ("/", "/feed") else path.lstrip("/")
         if name in STATIC:
-            self._send(200, (WEB / name).read_bytes(), STATIC[name])
+            folder, kind = STATIC[name]
+            self._send(200, (folder / name).read_bytes(), kind)
             return
         self._json(*handle("GET", self.path))
 

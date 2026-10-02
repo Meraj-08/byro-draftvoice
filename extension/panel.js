@@ -65,6 +65,8 @@
     }
   }
 
+  // Inside the extension the parent is LinkedIn's page, so messages to it never carry the comment text.
+  const IN_EXTENSION = location.protocol === "chrome-extension:";
   const tell = (message) => { if (window.parent !== window) window.parent.postMessage(message, "*"); };
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -109,6 +111,7 @@
     $("more").textContent = clamped ? "Show more" : "Show less";
   });
   $("pick").addEventListener("click", () => tell({ type: "draftvoice:pick" }));
+  $("pickAgain").addEventListener("click", () => tell({ type: "draftvoice:pick" }));
   $("close").addEventListener("click", () => tell({ type: "draftvoice:close" }));
 
   function showMessage(text) {
@@ -116,6 +119,7 @@
     $("post").hidden = $("stepsCard").hidden = $("result").hidden = $("actions").hidden = true;
     $("empty").hidden = false;
     $("emptyText").textContent = text;
+    $("pickAgain").hidden = window.parent === window;
   }
 
   // ---------- run ----------
@@ -274,7 +278,8 @@
           <div class="row"><button class="btn primary" data-act="apply">Apply rule</button><button class="btn" data-act="ignore">Ignore</button></div>`;
         $("result").append(s);
       }
-      tell({ type: "draftvoice:reviewed", action, text: action === "accept" || action === "edit" ? text : null });
+      const approved = action === "accept" || action === "edit";
+      tell({ type: "draftvoice:reviewed", action, text: approved && !IN_EXTENSION ? text : null });
     } catch (err) {
       toast(err.message);
     }
@@ -283,6 +288,7 @@
   // ---------- incoming posts ----------
 
   window.addEventListener("message", (e) => {
+    if (e.source !== window.parent) return; // only the page that embeds the panel may hand it a post
     const m = e.data || {};
     if (m.type === "draftvoice:post" && m.post?.text) {
       showPost(m.post, !!m.pickable);

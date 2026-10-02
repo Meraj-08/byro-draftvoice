@@ -2,21 +2,21 @@
 
 Why DraftVoice is built the way it is. Each entry lists what I believed, the options I weighed, what I picked, how I proved it, and what it costs. Entries marked planned were decided during design; built ones were confirmed in code. Time per phase is in [`time-log.md`](time-log.md).
 
-## 1. Scope · One local loop; the extension reads only the text I select
+## 1. Scope · One local loop; on LinkedIn, the extension reads only the one post I click on
 
 - **Belief:** the riskiest part is deciding when not to comment, not reading LinkedIn pages.
-- **Options weighed:** (a) Chrome extension reading LinkedIn pages, (b) local app where the founder brings a post, (c) right-click extension: highlight the post text, pick a voice (Rico or Fathin), get a draft, (d) extension that also fills LinkedIn's comment box, (e) daily shortlist with angles only.
-- **Picked:** (b) as the core, (c) as the way in. The extension gets the highlighted text from the browser's right-click menu and talks only to the local app. It has no LinkedIn permissions and never reads the page, records browsing, or types into LinkedIn. Approve copies the draft; the founder pastes and posts. (d) is rejected because writing into LinkedIn's page automates a logged-in session; a local mock feed shows the full handoff instead. (e) is kept as an "angle only" output mode.
-- **Proof:** TBD, demo runs the full loop with no LinkedIn access; the extension manifest lists no LinkedIn permissions.
-- **Trade-off accepted:** the founder highlights the post by hand, and there is no feed-wide discovery.
-- **Status:** planned
+- **Options weighed:** (a) extension that reads the LinkedIn feed as I scroll, (b) local app where the founder brings a post, (c) right-click extension on text I highlight, (d) extension that reads the one post I choose, only when I click, (e) extension that also fills LinkedIn's comment box, (f) daily shortlist with angles only.
+- **Picked:** (b) as the core, (d) as the way in. On 2 Oct 2026 at 19:32 I asked Fathin: "Is it okay if my extension reads the LinkedIn post I click on, just to draft a comment? It won't post or store anything. Or should I avoid reading LinkedIn pages and only use text I copy myself?" He replied: "Yes do whatever is required to get the beat result" (19:32, chat; quoted as written). I kept to what I asked: a tab on the right edge does nothing until clicked; then it reads the one post most visible on screen (author, headline, text) and outlines it, and "Not this post?" lets the next click choose another. It never scrolls, reads the feed in the background, stores LinkedIn content, types into LinkedIn, or posts; Approve only copies. All LinkedIn markup lives in `extension/linkedin_adapter.js`. (a) and (e) are rejected: reading the feed in the background and writing into LinkedIn go beyond the permission and automate a logged-in session. (c) was the plan before the permission; the mock feed (`draftvoice serve`) shows the same panel without LinkedIn.
+- **Proof:** `tests/test_extension.py` checks the manifest (host access to linkedin.com and localhost only, no storage or tabs permissions), that only the adapter knows LinkedIn markup, and that the content script contains no scrolling, observers, storage, typing, network calls, or clicks, and reads nothing until the tab is clicked. The adapter and content script were run on a synthetic LinkedIn-like page (`tests/fixtures/linkedin_like.html`), not on LinkedIn itself.
+- **Trade-off accepted:** LinkedIn changes its markup, so the adapter can break; when it cannot read a post, the panel says so instead of guessing. Text cut off by LinkedIn's "see more" is read as shown. There is still no feed-wide discovery.
+- **Status:** built
 
 ## 2. Evidence · Manual collection unless the founders allow a tool
 
 - **Belief:** public posts and comments, copied by hand, are enough to understand voice and topics.
 - **Options weighed:** (a) manual copying, (b) an extension reading pages I open, (c) the founder's own data export.
 - **Picked:** (a); (c) is the production path.
-- **Proof:** on 2 Oct 2026 (14:38 IST) I asked Fathin whether he preferred manual copying or a small tool that collects as I browse. He replied "Yes" (14:38 IST, chat). I read this as approval of manual collection. It does not clearly choose the tool, so no tool is built. Every item in `evidence.md` has a source and label.
+- **Proof:** on 2 Oct 2026 (14:38 IST) I asked Fathin whether he preferred manual copying or a small tool that collects as I browse. He replied "Yes" (14:38 IST, chat). I read this as approval of manual collection. It does not clearly choose the tool, so no tool is built. Every item in `evidence.md` has a source and label. His later permission (entry 1, 19:32) covers the extension reading the one post I click on; it does not change how evidence was collected.
 - **Trade-off accepted:** a small sample, and my picks may be biased toward longer comments.
 - **Status:** decided; no design-partner call was held
 

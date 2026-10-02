@@ -20,7 +20,7 @@ draftvoice = "draftvoice.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-draftvoice = ["web/*.html", "web/*.css", "web/*.js"]
+draftvoice = ["web/*.html", "web/*.css", "web/*.js"]  # the panel is served from extension/
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -32,6 +32,14 @@ See it in the browser:
 
 A mock feed of synthetic posts plus a few real public posts by Rico and Fathin (each tagged). Click the **DraftVoice** tab on the right edge: a sidebar opens, reads the post most visible on screen, and shows each step of the decision, then the draft with its evidence. Switch between Rico and Fathin, edit, and approve. Approving copies the comment; nothing is ever posted. "Not this post?" lets you click a different post. The server only listens on this machine and refuses requests from other websites.
 
+Use it on LinkedIn (Chrome):
+
+1. Run `.venv/bin/draftvoice serve` and leave it running.
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, and choose the `extension/` folder.
+3. On LinkedIn, scroll to a post and click the blue **DraftVoice** tab on the right edge.
+
+What the extension reads: only the one post most visible on screen (author, headline, and text), and only when you click the tab or pick a post with "Not this post?". It never scrolls, reads the feed in the background, stores anything from LinkedIn, types into LinkedIn, or posts. Approve copies the comment; you paste it yourself. It can reach only linkedin.com and this machine's DraftVoice server. Fathin gave written permission for this scope on 2 Oct 2026 (see the decision log).
+
 Review a draft from the terminal instead. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
 
 ```bash

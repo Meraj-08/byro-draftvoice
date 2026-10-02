@@ -1,0 +1,19 @@
+/* Only DraftVoice's own elements are styled; LinkedIn's page is left alone apart from the outline. */
+#draftvoice-tab {
+  position: fixed; right: 0; top: 40%; z-index: 2147483646;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  padding: 12px 6px; border: 0; border-radius: 0 8px 8px 0;
+  background: #3858e9; color: #fff; font: 600 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, .2); transition: right 200ms ease;
+}
+.draftvoice-open #draftvoice-tab { right: 380px; }
+#draftvoice-drawer {
+  position: fixed; top: 0; right: 0; z-index: 2147483647; width: 380px; max-width: 100vw; height: 100vh;
+  transform: translateX(100%); transition: transform 200ms ease; box-shadow: -4px 0 24px rgba(0, 0, 0, .15);
+  background: #f4f5f7;
+}
+.draftvoice-open #draftvoice-drawer { transform: none; }
+#draftvoice-drawer iframe { width: 100%; height: 100%; border: 0; display: block; }
+.draftvoice-selected { outline: 2px solid #3858e9 !important; outline-offset: 2px; border-radius: 8px; }
+.draftvoice-picking [data-urn^="urn:li:activity"], .draftvoice-picking .feed-shared-update-v2 { cursor: crosshair !important; }
+@media (prefers-reduced-motion: reduce) { #draftvoice-tab, #draftvoice-drawer { transition: none; } }

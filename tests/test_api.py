@@ -203,8 +203,8 @@ def test_server_only_serves_known_files(server):
 def test_panel_has_no_inline_scripts_or_handlers():
     # Extension pages (MV3) block inline scripts and inline event handlers.
     import re
-    from draftvoice.api import WEB
-    html = (WEB / "panel.html").read_text()
+    from draftvoice.api import EXTENSION
+    html = (EXTENSION / "panel.html").read_text()
     assert re.findall(r"<script[^>]*>", html) == ['<script src="panel.js">']
     assert not re.search(r"\son[a-z]+=", html)
     assert "Nothing is sent to LinkedIn." in html and "untrusted input" in html

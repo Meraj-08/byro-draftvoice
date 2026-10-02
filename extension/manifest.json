@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "DraftVoice",
+  "version": "0.1.0",
+  "description": "Drafts a comment in a founder's voice for the one LinkedIn post you choose. Never posts, types, scrolls, or stores anything.",
+  "permissions": ["clipboardWrite"],
+  "host_permissions": ["https://www.linkedin.com/*", "http://127.0.0.1:8765/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["linkedin_adapter.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {"resources": ["panel.html", "panel.css", "panel.js"], "matches": ["https://www.linkedin.com/*"]}
+  ]
+}
