@@ -24,6 +24,17 @@ DraftVoice either drafts a comment, with the evidence behind each sentence and t
 - `--drafter dishonest-number` (or `-name`, `-first_person`, `-unknown_evidence`, `-bad_json`) uses a stub that lies on purpose, to show the checks blocking it.
 - `--post p-agents` uses a synthetic test post from `fixtures/posts.json` instead of pasted text.
 
+Review a draft. `propose` prints its id; DraftVoice never posts, it gives you the text to copy:
+
+```bash
+.venv/bin/draftvoice review pr-1a2b3c4d --accept          # or --edit "your version", --reject, --skip
+.venv/bin/draftvoice rules                                # suggestions appear after the same edit twice
+.venv/bin/draftvoice rules approve rule-0f44ae            # creates a new profile version
+.venv/bin/draftvoice rules revert --founder rico          # back to the previous version
+```
+
+Reviews, rule suggestions, and profile versions are saved in `.draftvoice/` (not committed).
+
 Check the proof:
 
 ```bash

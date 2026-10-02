@@ -52,9 +52,9 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 - **Belief:** the founder owns their voice; one edit is not enough to learn from.
 - **Options weighed:** (a) update the profile automatically, (b) suggest a rule after repeated edits.
 - **Picked:** (b). Two matching edits suggest a rule; it applies after approval, creates a new version, and can be reverted.
-- **Proof:** TBD, tests for one edit, two edits, approval, and revert.
-- **Trade-off accepted:** TBD
-- **Status:** planned
+- **Proof:** `tests/test_learning.py`. One edit makes no rule; two edits with the same change suggest one; different changes do not add up; Rico's edits never affect Fathin. Nothing changes until approval; approving creates an immutable profile version that the next draft is checked against; revert moves back to the previous version and marks the rule reverted; reject changes nothing. The founder files in `data/founders/` are never modified. Reviews and rule events are append-only logs.
+- **Trade-off accepted:** it only learns changes the voice checks can express: shorter, fewer sentences, lowercase, no emoji, no hashtags. Changes in wording or substance are saved with every review but not learned yet, and learned rules only warn, like every voice rule.
+- **Status:** built
 
 ## 7. Data · Real founder data kept apart from test data
 

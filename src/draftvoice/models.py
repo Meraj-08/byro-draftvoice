@@ -103,8 +103,10 @@ class RuleProposal(Record):
     id: str
     founder_id: str
     rule: str
+    check: VoiceCheck | None = None
     source_review_ids: list[str]
     status: Literal["suggested", "approved", "rejected", "reverted"] = "suggested"
+    profile_version: int | None = None  # the version the approval created
 
 
 class Expected(Record):

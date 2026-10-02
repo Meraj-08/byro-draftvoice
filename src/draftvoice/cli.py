@@ -1,11 +1,11 @@
 import argparse
 import sys
 
-from draftvoice import __version__
+from draftvoice import __version__, learning
 from draftvoice.model import FABRICATIONS, DishonestStub, ModelError, get_drafter, load_env
 from draftvoice.models import Proposal
 from draftvoice.pipeline import post_from_text, propose
-from draftvoice.store import DataError, Founder, find_founder, load_fixtures
+from draftvoice.store import DataError, Founder, load_fixtures
 
 DRAFTERS = ["env", "stub", "gemini"] + [f"dishonest-{k}" for k in FABRICATIONS]
 
@@ -28,6 +28,19 @@ def build_parser() -> argparse.ArgumentParser:
         help="who writes the draft: env (MODEL_MODE in .env, default stub), stub, gemini, "
              "or a dishonest stub that lies on purpose",
     )
+    r = commands.add_parser("review", help="accept, edit, reject, or skip a proposal")
+    r.add_argument("proposal", help="the proposal id printed by propose, e.g. pr-1a2b3c4d")
+    action = r.add_mutually_exclusive_group(required=True)
+    action.add_argument("--accept", action="store_true", help="use the draft as it is")
+    action.add_argument("--edit", metavar="TEXT", help="use your edited version instead")
+    action.add_argument("--reject", action="store_true", help="the draft is wrong")
+    action.add_argument("--skip", action="store_true", help="not commenting on this post")
+
+    ru = commands.add_parser("rules", help="list, approve, reject, or revert learned voice rules")
+    ru.add_argument("action", nargs="?", default="list", choices=["list", "approve", "reject", "revert"])
+    ru.add_argument("target", nargs="?", help="a rule id for approve/reject")
+    ru.add_argument("--founder", help="whose rules (needed for revert)")
+
     e = commands.add_parser("eval", help="run every check on the fixtures and write docs/eval-report.md")
     e.add_argument("--out", help="where to write the report (default docs/eval-report.md)")
     e.add_argument("--live", action="store_true", help="also judge live Gemini drafts (needs GEMINI_API_KEY)")
@@ -90,7 +103,7 @@ def render(proposal: Proposal, founder: Founder, post_text: str) -> str:
 
 
 def cmd_propose(args) -> int:
-    founder = find_founder(args.founder)
+    founder = learning.current_founder(args.founder)
     if args.post:
         fixtures = {f.post.id: f.post for f in load_fixtures()}
         if args.post not in fixtures:
@@ -99,8 +112,54 @@ def cmd_propose(args) -> int:
     else:
         post = post_from_text(args.text)
     proposal = propose(post, founder, _drafter(args.drafter))
+    learning.save_proposal(proposal, post.text)
     print(render(proposal, founder, post.text))
+    if proposal.decision == "draft":
+        print(f"\nReview it: draftvoice review {proposal.id} --accept | --edit \"...\" | --reject | --skip")
     return 0
+
+
+def cmd_review(args) -> int:
+    action = "accept" if args.accept else "edit" if args.edit else "reject" if args.reject else "skip"
+    rv, suggestion = learning.review(args.proposal, action, args.edit)
+    print(f"Saved: {action} ({rv.id}).")
+    if action in ("accept", "edit"):
+        text = args.edit if action == "edit" else learning.draft_text(learning.get_proposal(args.proposal))
+        print(f"\nReady to copy (DraftVoice never posts):\n  {text}")
+    if suggestion:
+        print(f"\nYou made this change twice. Suggested rule ({suggestion.id}): {suggestion.rule}")
+        print(f"Apply it: draftvoice rules approve {suggestion.id}   Ignore it: draftvoice rules reject {suggestion.id}")
+    return 0
+
+
+def cmd_rules(args) -> int:
+    if args.action == "approve":
+        version = learning.approve(_need(args.target, "a rule id"))
+        print(f"Approved. Profile is now version {version}. Undo: draftvoice rules revert --founder "
+              f"{learning._get_rule(args.target).founder_id}")
+    elif args.action == "reject":
+        learning.reject(_need(args.target, "a rule id"))
+        print("Rejected. Nothing changed.")
+    elif args.action == "revert":
+        version = learning.revert(_need(args.founder, "--founder"))
+        print(f"Reverted. {args.founder} is back on profile version {version}.")
+    else:
+        rules = learning.rule_proposals(args.founder)
+        if not rules:
+            print("No rule suggestions yet. One edit never makes a rule; the same change twice suggests one.")
+        for r in rules:
+            made = f", created v{r.profile_version}" if r.profile_version else ""
+            print(f"{r.id}  {r.founder_id:<7} {r.status:<9} {r.rule}  (from {len(r.source_review_ids)} edits{made})")
+        for fid in sorted({r.founder_id for r in rules}):
+            active, all_versions = learning.versions(fid)
+            print(f"{fid}: active profile v{active} of {all_versions}")
+    return 0
+
+
+def _need(value, what):
+    if not value:
+        raise learning.ReviewError(f"this needs {what}")
+    return value
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -110,8 +169,9 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     try:
-        return cmd_eval(args) if args.command == "eval" else cmd_propose(args)
-    except (DataError, ModelError) as exc:
+        handler = {"eval": cmd_eval, "review": cmd_review, "rules": cmd_rules}.get(args.command, cmd_propose)
+        return handler(args)
+    except (DataError, ModelError, learning.ReviewError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
