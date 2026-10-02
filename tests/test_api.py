@@ -103,3 +103,82 @@ def test_server_allows_the_extension(server):
                                     origin="chrome-extension://abc")
     assert status == 200 and json.loads(body)["decision"] == "draft"
     assert headers["Access-Control-Allow-Origin"] == "chrome-extension://abc"
+
+
+# Steps: the real outcome of each stage, stopping where the run stopped
+
+def steps_of(view):
+    return [(s["key"], s["status"]) for s in view["steps"]]
+
+
+def test_steps_for_a_draft_are_all_done():
+    _, view = post("/api/propose", {"founder": "rico", "text": LINKEDIN_POST, "drafter": "stub", "author": "Mara Lind"})
+    assert steps_of(view) == [(k, "done") for k in ("reading", "topics", "evidence", "drafting", "checks")]
+    assert "RP-20" in view["steps"][2]["detail"]
+    assert view["post"]["author"] == "Mara Lind"
+
+
+def test_steps_stop_at_the_topic_step():
+    _, view = post("/api/propose", {"founder": "rico", "text": "Excited to announce we just joined Y Combinator!",
+                                    "drafter": "stub"})
+    assert steps_of(view) == [("reading", "done"), ("topics", "stopped"), ("evidence", "not_reached"),
+                              ("drafting", "not_reached"), ("checks", "not_reached")]
+    assert "milestone" in view["steps"][1]["detail"]
+    assert view["can_override"]
+
+
+def test_steps_stop_at_the_evidence_step():
+    _, view = post("/api/propose", {"founder": "fathin", "text": "AI comments are ruining LinkedIn.", "drafter": "stub"})
+    assert ("evidence", "stopped") in steps_of(view)
+    assert view["reason_code"] == "no_evidence"
+
+
+def test_steps_stop_at_the_checks_step(monkeypatch):
+    from draftvoice import api
+    from draftvoice.model import DishonestStub
+    monkeypatch.setattr(api, "_drafter", lambda name: DishonestStub("number"))
+    _, view = post("/api/propose", {"founder": "rico", "text": LINKEDIN_POST})
+    assert steps_of(view)[-1] == ("checks", "stopped")
+    assert "V2 numbers" in view["steps"][-1]["detail"] and view["draft"] == ""
+
+
+def test_steps_stop_at_drafting_when_the_model_fails(monkeypatch):
+    from draftvoice import api
+    from draftvoice.model import ModelError
+
+    class Down:
+        name = "down"
+
+        def draft(self, request):
+            raise ModelError("503")
+
+    monkeypatch.setattr(api, "_drafter", lambda name: Down())
+    _, view = post("/api/propose", {"founder": "rico", "text": LINKEDIN_POST})
+    assert steps_of(view)[-2:] == [("drafting", "stopped"), ("checks", "not_reached")]
+
+
+def test_draft_anyway_overrules_the_gate_but_not_the_checks():
+    text = "Excited to announce we just joined Y Combinator! Turns out being invisible on LinkedIn makes you harder to source."
+    _, skipped = post("/api/propose", {"founder": "rico", "text": text, "drafter": "stub"})
+    assert skipped["decision"] == "do_nothing"
+    _, forced = post("/api/propose", {"founder": "rico", "text": text, "drafter": "stub", "override": True})
+    assert forced["decision"] == "draft"
+    assert "Overruled by you. The gate said: A milestone post" in forced["steps"][1]["detail"]
+    assert all(c["passed"] for c in forced["checks"])  # the validators still ran
+
+
+def test_draft_anyway_without_any_matching_evidence_still_does_nothing():
+    _, view = post("/api/propose", {"founder": "fathin", "text": "Won our first padel tournament this weekend.",
+                                    "drafter": "stub", "override": True})
+    assert view["decision"] == "do_nothing" and ("evidence", "stopped") in steps_of(view)
+
+
+def test_rules_reject_through_the_api():
+    edited = "if you're invisible you're harder to source fr"
+    suggestion = None
+    for _ in range(2):
+        _, p = post("/api/propose", {"founder": "rico", "text": LINKEDIN_POST, "drafter": "stub"})
+        suggestion = post("/api/review", {"proposal_id": p["id"], "action": "edit", "edited_text": edited})[1]["suggestion"] or suggestion
+    assert post("/api/rules/reject", {"id": suggestion["id"]})[1]["status"] == "rejected"
+    status, rules = handle("GET", "/api/rules?founder=rico")
+    assert status == 200 and rules["rules"][0]["status"] == "rejected" and rules["active_version"] == {"rico": 1}

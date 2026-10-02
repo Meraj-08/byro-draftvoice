@@ -12,7 +12,7 @@ from urllib.parse import parse_qs, urlparse
 from draftvoice import learning
 from draftvoice.model import ModelError, get_drafter, load_env
 from draftvoice.models import Proposal
-from draftvoice.pipeline import post_from_text, propose
+from draftvoice.pipeline import OVERRIDABLE, post_from_text, run
 from draftvoice.store import FIXTURES_DIR, DataError, Founder, list_founders
 
 WEB = Path(__file__).parent / "web"
@@ -33,7 +33,7 @@ def allowed_origin(origin: str | None, port: int) -> bool:
     return origin.startswith("chrome-extension://") or origin in (f"http://127.0.0.1:{port}", f"http://localhost:{port}")
 
 
-def proposal_view(proposal: Proposal, founder: Founder) -> dict:
+def proposal_view(proposal: Proposal, founder: Founder, steps=()) -> dict:
     evidence = {e.id: e for e in founder.evidence}
     cited = list(dict.fromkeys(i for s in proposal.sentences for i in s.evidence_ids))
     return {
@@ -47,6 +47,8 @@ def proposal_view(proposal: Proposal, founder: Founder) -> dict:
         "evidence": [{"id": i, "text": evidence[i].text, "source": evidence[i].source} for i in cited if i in evidence],
         "checks": [c.model_dump() for c in proposal.checks if c.blocking],
         "warnings": [c.model_dump() for c in proposal.checks if not c.blocking and not c.passed],
+        "steps": [{"key": s.key, "label": s.label, "status": s.status, "detail": s.detail} for s in steps],
+        "can_override": proposal.decision == "do_nothing" and proposal.reason_code in OVERRIDABLE,
     }
 
 
@@ -78,9 +80,12 @@ def handle(method: str, path: str, body: dict | None = None) -> tuple[int, dict]
             if not text:
                 raise ApiError(400, "post text is required")
             founder = learning.current_founder(body.get("founder") or "")
-            proposal = propose(post_from_text(text), founder, _drafter(body.get("drafter")))
+            proposal, steps = run(post_from_text(text), founder, _drafter(body.get("drafter")),
+                                  override=bool(body.get("override")))
             learning.save_proposal(proposal, text)
-            return 200, proposal_view(proposal, founder)
+            view = proposal_view(proposal, founder, steps)
+            view["post"] = {"author": body.get("author"), "headline": body.get("headline"), "text": text}
+            return 200, view
 
         if method == "POST" and url.path == "/api/review":
             action = body.get("action")
