@@ -78,10 +78,16 @@ Why DraftVoice is built the way it is. Each entry lists what I believed, the opt
 
 - **Belief:** an AI assistant speeds up review and setup, but every output has to be checked against the brief and my own intent.
 - **Options weighed:** (a) no AI, (b) AI writes the design, (c) AI reviews and scaffolds while the product and design decisions stay mine.
-- **Picked:** (c). Claude (via Claude Code) reviewed my design against the six deliverables, compared how public submissions structure their docs, and set up the repository and logs.
+- **Picked:** (c). Claude (via Claude Code) reviewed my design against the six deliverables, compared how public submissions structure their docs, set up the repository and logs, and wrote code to my specs. I decided scope, tested each phase myself (including on LinkedIn), and asked for every change.
 - **Mistakes caught:**
   - It kept my v0 design in the repo with its own added notes, instead of my v1. I caught it; v1 was copied in unchanged and verified byte-for-byte.
   - It counted active time from the clock, including lunch. I corrected the time log.
   - It set the Gemini model to one no longer offered to new keys. The first live call returned 404; I switched to the model the API named.
+  - It guessed LinkedIn's markup from older class names. On real LinkedIn the extension found no posts, so there was nothing to choose. I caught it in testing; the adapter now also finds posts by structure, and the founder can choose how a post is picked.
+  - The sidebar kept the first post while I scrolled. I asked for a way to switch; a "Draft this post" button and ↻ were added, without re-reading posts on every scroll.
+  - Author names showed as "Unknown author", because the first profile link on LinkedIn is the photo. Fixed to try every link and LinkedIn's "View … profile" label.
+  - On a real funding post the draft was two pasted evidence quotes and treated the post as off-topic. Two causes: the milestone check missed "We've raised", and the offline test writer was being used instead of the live model. Milestones now get the founder's own past reaction ("congrats!", RS-25); the live model is the default when a key is set.
+  - Its first fix for milestones ("raised + an amount") fired on a prompt-injection post. The test suite caught it; the rule was removed and a test now guards it.
+  - Its first eval reported "35/35 lies blocked" as if it were a measurement. I asked for unseen lies and real data with the checks frozen; the honest numbers are 14/20 unseen lies blocked and 4/10 real contributions passing.
 - **Proof:** every AI change is reviewed before commit; claims in the docs point to a file, test, or command output.
 - **Status:** ongoing
