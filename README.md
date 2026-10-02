@@ -24,27 +24,98 @@ DraftVoice either drafts a comment, with the evidence behind each sentence and t
 
 For live drafts, put `GEMINI_API_KEY` in `.env` (see `.env.example`). When a key is set, the browser panel and the API use Gemini by default. Without one, they use an offline stub.
 
-## How It Works
+## Architecture
+
+From [`docs/design.md`](docs/design.md#3-architecture).
 
 ```mermaid
-flowchart LR
-    accTitle: DraftVoice pipeline
-    accDescr: A post passes through the gate, the relevance check, the drafter, and the checks. Any stage can stop the run with do nothing. Only the founder copies the final comment.
+flowchart TB
+    F[Founder]
 
-    post["Post<br/>untrusted data"]
-    gate["Gate<br/>gate.py"]
-    rel["Relevance<br/>grounding.py"]
-    draft["Drafter<br/>model.py"]
-    checks["Checks V1–V7<br/>validate.py"]
-    copy["Copy note<br/>grounding.py"]
-    founder["Founder<br/>approve, edit, skip"]
-    nothing["Do nothing<br/>with the reason"]
+    subgraph Input["Untrusted input"]
+        POST["Post input<br/>Synthetic fixture or user-confirmed text"]
+    end
 
-    post --> gate --> rel --> draft --> checks --> copy --> founder
-    gate -.-> nothing
-    rel -.-> nothing
-    draft -.-> nothing
-    checks -.-> nothing
+    subgraph Data["Founder-approved data"]
+        PROFILE[(Voice profile)]
+        EVIDENCE[(Expertise evidence)]
+        HISTORY[(Review history)]
+    end
+
+    UI["Local review UI / CLI"]
+
+    subgraph App["Local application"]
+        API[Local API]
+        DECIDE{Engagement decision}
+        GATE{"Approved evidence found?"}
+        GENERATE[Comment generation]
+        VALIDATE{Draft validation}
+    end
+
+    MODEL["Gemini API<br/>or deterministic stub"]
+
+    SKIP["Do nothing + reason"]
+    DRAFT["Draft + evidence<br/>for review"]
+    HANDOFF["Manual copy / mock handoff"]
+
+    F -->|provides or confirms| POST
+    F -->|defines and approves| Data
+    Data --> App
+
+    POST --> UI --> API --> DECIDE
+    DECIDE -->|relevant| GATE
+    GATE -->|yes| GENERATE
+    GENERATE <--> MODEL
+    GENERATE --> VALIDATE
+
+    DECIDE -->|not relevant| SKIP
+    GATE -->|no| SKIP
+    VALIDATE -->|fails| SKIP
+    VALIDATE -->|passes| DRAFT
+
+    SKIP --> UI
+    DRAFT --> UI
+    UI -->|accept, edit, reject, skip| HISTORY
+    HISTORY -.->|founder-approved preference change| PROFILE
+    F -.->|copies and posts manually| HANDOFF
+```
+
+### Runtime Flow
+
+```mermaid
+sequenceDiagram
+    participant F as Founder
+    participant UI as Review panel / CLI
+    participant API as Local API
+    participant G as Gate
+    participant R as Relevance
+    participant M as Gemini or stub
+    participant V as Checks V1–V7
+    participant H as Review history
+
+    F->>UI: choose a post
+    UI->>API: post text (untrusted data)
+    API->>G: decide(post, founder)
+    alt off topic, sensitive, bait, or no evidence
+        G-->>UI: do nothing + reason
+    else on topic with approved evidence
+        G->>R: matched evidence
+        alt no non-generic word shared with the post
+            R-->>UI: do nothing: no evidence relates to this post
+        else evidence relates
+            R->>M: post, evidence, voice rules
+            M-->>V: sentences with evidence IDs
+            alt a check fails or the model errors
+                V-->>UI: do nothing + which check
+            else all checks pass
+                V-->>UI: draft + evidence + notes (copy, voice)
+                F->>UI: accept, edit, reject, or skip
+                UI->>H: save review
+                H-->>F: suggest a rule after the same edit twice
+                F->>F: copy and post manually
+            end
+        end
+    end
 ```
 
 | Stage | What it decides |
